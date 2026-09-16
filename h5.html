@@ -1,0 +1,2071 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>首頁 / 卡片</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#ffffff;
+    --card-bg:#ffffff;
+    --text-primary:#111318;
+    --text-secondary:#6B7280;
+    --text-tertiary:#b4b8c0;
+    --accent-blue:#0052FF;
+    --accent-blue-soft:#e8effe;
+    --grey-btn:#F3F4F6;
+    --divider:#E5E7EB;
+    --nav-icon:#9aa0ab;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--page-bg);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+  .phone{
+    width:100%;
+    min-height:100dvh;
+    background:var(--page-bg);
+    position:relative;
+  }
+  .screen{
+    padding:18px 20px 0;
+    min-height:100dvh;
+    padding-top:calc(18px + env(safe-area-inset-top, 0px));
+    display:flex;
+    flex-direction:column;
+  }
+  /* ---- Header (home view) ---- */
+  .hd{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .hd .grow{flex:1;}
+  .hd-iconbtn{
+    width:42px;height:42px;border-radius:50%;
+    background:#fff;border:1px solid rgba(17,19,24,0.05);
+    box-shadow:0 2px 6px rgba(17,19,24,0.08);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-primary);
+    flex:none;
+    margin-left:8px;
+    cursor:pointer;
+  }
+
+  /* ---- Signed-out hero (replaces the balance block: a guest has no balance to show) ---- */
+  .guest-hero{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:12px;
+    padding:4px 12px 22px;
+  }
+  .guest-hero .ic{
+    width:52px;height:52px;border-radius:50%;
+    background:var(--accent-blue-soft);
+    color:var(--accent-blue);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .guest-hero h2{
+    margin:0;
+    font-size:21.5px;
+    font-weight:800;
+    color:var(--text-primary);
+  }
+  .guest-hero p{
+    margin:0;
+    font-size:16.5px;
+    line-height:1.6;
+    color:var(--text-secondary);
+    max-width:260px;
+  }
+
+  /* ---- Actions: colored shape wraps only the icon; label sits outside it,
+         same size/weight/color for every item so nothing looks bigger or smaller ---- */
+  .actions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .action-btn{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .action-icon{
+    width:60px;
+    height:60px;
+    border-radius:20px;
+    background:var(--grey-btn);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-primary);
+  }
+  .action-icon.primary{
+    background:var(--accent-blue);
+    color:#fff;
+  }
+  .action-icon svg{width:26px;height:26px;}
+  .action-label{
+    font-size:17px;
+    line-height:1;
+    font-weight:500;
+    color:var(--text-primary);
+  }
+
+  /* ---- Banner carousel: one full-width banner per view (no peeking neighbours),
+         swipe left/right to move to the next; dots below track which one is showing ---- */
+  .banner-viewport{
+    overflow-x:auto;
+    scrollbar-width:none;
+    margin-bottom:10px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    border-radius:16px;
+  }
+  .banner-viewport::-webkit-scrollbar{display:none;}
+  .banner-track{
+    display:flex;
+  }
+  .banner-slide{
+    flex:0 0 100%;
+    width:100%;
+    scroll-snap-align:start;
+    height:104px;
+    position:relative;
+    overflow:hidden;
+    color:#fff;
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    box-shadow:0 3px 10px rgba(17,19,24,0.07);
+  }
+  .banner-slide.cold{
+    background:
+      radial-gradient(circle at 82% 20%, rgba(90,140,255,0.2) 0, transparent 45%),
+      linear-gradient(160deg,#171b24,#05060a);
+  }
+  .banner-slide.cold .hexbg{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(30deg,#20242e 12%, transparent 12.5%, transparent 87%, #20242e 87.5%, #20242e),
+      linear-gradient(150deg,#20242e 12%, transparent 12.5%, transparent 87%, #20242e 87.5%, #20242e),
+      linear-gradient(30deg,#20242e 12%, transparent 12.5%, transparent 87%, #20242e 87.5%, #20242e),
+      linear-gradient(150deg,#20242e 12%, transparent 12.5%, transparent 87%, #20242e 87.5%, #20242e);
+    background-size:24px 42px;
+    background-position:0 0,0 0,12px 21px,12px 21px;
+    opacity:.4;
+  }
+  .cold-device{
+    position:absolute;
+    top:18px;right:22px;
+    width:34px;height:50px;
+    border-radius:7px;
+    background:linear-gradient(155deg,#3a4356,#12141a);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 5px 12px rgba(0,0,0,0.45);
+  }
+  .cold-device::after{
+    content:"";
+    position:absolute;
+    left:5px;right:5px;top:6px;
+    height:14px;
+    border-radius:3px;
+    background:rgba(90,140,255,0.35);
+  }
+  .banner-slide.cold .txt{position:relative;z-index:1;font-weight:800;font-size:19px;line-height:1.35;max-width:62%;}
+  .banner-slide.eco{
+    background:linear-gradient(150deg,#eef2fb,#e2e9f8);
+    color:#12141a;
+  }
+  .banner-slide.bito{
+    background:linear-gradient(150deg,#F97316,#EA580C);
+    align-items:flex-start;
+  }
+  .banner-slide.bito .banner-title{font-size:20px;margin-bottom:4px;}
+  .banner-slide.bito .banner-feat{font-size:13.5px;color:rgba(255,255,255,.88);max-width:60%;}
+  .bito-decor{position:absolute;border-radius:50%;background:rgba(255,255,255,0.12);}
+  .bito-decor.d1{width:100px;height:100px;right:-30px;top:-34px;}
+  .bito-decor.d2{width:64px;height:64px;right:14px;bottom:-30px;background:rgba(255,255,255,0.08);}
+  .banner-slide.c2c{
+    background:linear-gradient(150deg,#EFF6FF,#F8FAFF);
+    color:#12141a;
+  }
+  .c2c-icon{
+    position:absolute;right:18px;top:50%;transform:translateY(-50%);
+    width:50px;height:50px;border-radius:50%;
+    background:#DBEAFE;color:#1D4ED8;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .banner-slide.c2c .badge{
+    align-self:flex-start;
+    background:#DBEAFE;color:#1D4ED8;
+    font-size:12px;font-weight:700;
+    padding:3px 8px;border-radius:999px;
+    margin-bottom:6px;
+  }
+  .banner-brand{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    font-size:15px;
+    margin-bottom:6px;
+  }
+  .banner-brand .logo{
+    width:16px;height:16px;border-radius:4px;
+    background:#111318;
+    display:flex;align-items:center;justify-content:center;
+    color:#f5c344;font-size:12px;font-weight:800;
+  }
+  .banner-title{
+    font-size:20px;
+    font-weight:800;
+    line-height:1.25;
+    margin-bottom:6px;
+    max-width:62%;
+  }
+  .banner-title span{color:var(--accent-blue);}
+  .banner-feat{
+    font-size:13px;
+    color:#4b5160;
+    margin-bottom:2px;
+    max-width:62%;
+  }
+  .banner-cta{
+    margin-top:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    background:var(--accent-blue);
+    color:#fff;
+    font-size:13.5px;
+    font-weight:700;
+    padding:6px 12px;
+    border-radius:999px;
+    align-self:flex-start;
+    position:relative;
+    z-index:1;
+  }
+  .eco-card{
+    position:absolute;
+    right:16px;top:50%;
+    transform:translateY(-50%) rotate(-8deg);
+    width:64px;height:42px;
+    border-radius:8px;
+    background:linear-gradient(150deg,#1B1F3B,#0B1E4D 55%,#132C6B);
+    box-shadow:0 6px 14px rgba(11,30,77,0.35);
+  }
+  .eco-card::after{
+    content:"VISA";
+    position:absolute;
+    bottom:5px;right:7px;
+    color:#fff;
+    font-style:italic;
+    font-weight:800;
+    font-size:11px;
+    letter-spacing:.4px;
+  }
+  .eco-card::before{
+    content:"";
+    position:absolute;
+    left:7px;top:7px;
+    width:11px;height:8px;
+    border-radius:2px;
+    background:rgba(224,169,58,0.85);
+  }
+  .dots{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-bottom:18px;
+  }
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--text-tertiary);border:none;padding:0;cursor:pointer;transition:width .2s ease,background .2s ease;}
+  .dot.active{width:16px;background:var(--accent-blue);}
+
+  /* ---- Latest news: replaces the single heavy notice bar with a light 3-row list,
+         so this section carries the same visual weight as a normal content block
+         instead of one oversized colored strip ---- */
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .section-head h3{font-size:18.5px;margin:0;color:var(--text-primary);font-weight:700;}
+  .section-head a{font-size:16.5px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
+  .news-list{margin-bottom:18px;}
+  .news-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 0;
+    border-bottom:1px solid var(--divider);
+  }
+  .news-item:last-child{border-bottom:none;}
+  .news-item .dot-ic{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent-blue);
+    flex:none;
+  }
+  .news-item .txt{flex:1;font-size:16.5px;font-weight:500;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .news-item .date{flex:none;font-size:15px;color:var(--text-tertiary);}
+
+  /* ---- View containers: #view-home / #view-card are toggled by JS (goTo()) so
+         switching "pages" never leaves this document or changes the URL ---- */
+  #view-card{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-card[hidden]{display:none;}
+
+  /* ---- Transfer view: reached as a pushed flow from the 轉帳 quick action (not a nav tab),
+         so it has its own back button and hides the shared bottom nav while showing. ---- */
+  #view-transfer{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-transfer[hidden]{display:none;}
+  .tf-hd{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .tf-back{
+    width:46px;height:46px;border-radius:14px;
+    background:var(--grey-btn);border:none;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-primary);
+    flex:none;
+    cursor:pointer;
+  }
+  .tf-title{
+    flex:1;
+    text-align:center;
+    margin-right:46px;
+    font-size:21.5px;
+    font-weight:700;
+    color:var(--text-primary);
+  }
+  .tf-route-card{
+    background:var(--grey-btn);
+    border-radius:14px;
+    margin-bottom:6px;
+  }
+  .tf-route-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+  }
+  .tf-route-label{font-size:16.5px;color:var(--text-secondary);font-weight:400;}
+  .tf-route-value{font-size:18px;color:var(--text-primary);font-weight:700;}
+  .tf-route-divider{border:none;border-top:1px solid var(--divider);margin:0 16px;}
+  .tf-swap-wrap{
+    display:flex;
+    justify-content:center;
+    margin:-14px 0 8px;
+    position:relative;
+    z-index:1;
+  }
+  .tf-swap-btn{
+    width:46px;height:46px;border-radius:50%;
+    background:var(--accent-blue-soft);
+    border:3px solid #fff;
+    color:var(--accent-blue);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(17,19,24,0.08);
+  }
+  .tf-coin-select{
+    display:block;
+    width:100%;
+    border:1.5px solid var(--divider);
+    border-radius:999px;
+    background:#fff;
+    height:50px;
+    font-family:inherit;
+    font-size:19px;
+    font-weight:700;
+    color:var(--accent-blue);
+    cursor:pointer;
+    margin-bottom:20px;
+  }
+  .tf-amount-label{
+    font-size:16.5px;
+    font-weight:500;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+  }
+  .tf-amount-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid var(--divider);
+    border-radius:16px;
+    padding:12px 14px;
+    margin-bottom:8px;
+  }
+  .tf-amount-input{
+    flex:1;
+    min-width:0;
+    border:none;
+    outline:none;
+    background:none;
+    font-family:inherit;
+    font-size:26.5px;
+    font-weight:700;
+    color:var(--text-primary);
+  }
+  .tf-amount-input::placeholder{color:var(--text-tertiary);}
+  .tf-amount-unit{font-size:17px;font-weight:600;color:var(--text-secondary);flex:none;}
+  .tf-amount-all{
+    flex:none;
+    border:none;
+    background:var(--accent-blue);
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    font-family:inherit;
+    padding:7px 14px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .tf-available{font-size:16.5px;color:var(--text-secondary);margin-bottom:20px;}
+  .tf-available span{color:var(--text-primary);font-weight:700;}
+  .cta:disabled{
+    background:var(--text-tertiary);
+    cursor:not-allowed;
+    opacity:.55;
+  }
+
+  /* ---- Card apply view: pushed sub-screen reached from 立即體驗 on the 卡片 tab,
+         mirrors the reference (portrait card, back button, price, one-line description).
+         Uses the established headline/body scale (17/800, 12.5/400) rather than the
+         reference's own sizing, so it stays consistent with the rest of the app. ---- */
+  #view-card-apply{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-card-apply[hidden]{display:none;}
+  .apply-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:20px;
+  }
+  .apply-vcard{
+    width:62%;
+    max-width:230px;
+    aspect-ratio:0.63/1;
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 14px 32px rgba(11,30,77,0.22);
+    transition:background .35s ease;
+  }
+  .apply-vcard.tier-regular{background:linear-gradient(160deg,#1B1F3B,#0B1E4D 45%,#0052FF);}
+  .apply-vcard.tier-premium{background:linear-gradient(160deg,#241835,#3B0B4D 45%,#8B2FD1);}
+  .apply-vcard.tier-elite{background:linear-gradient(160deg,#141414,#1c1c1c 45%,#3a2f0f);}
+  .apply-vcard .chip-badge{
+    position:absolute;top:16px;right:16px;
+    width:16px;height:16px;
+    border-radius:5px;
+    background:rgba(255,255,255,0.9);
+    box-shadow:0 0 0 2px rgba(255,255,255,0.25);
+  }
+  .apply-vcard .brand-v{
+    position:absolute;top:44px;right:16px;
+    writing-mode:vertical-rl;
+    color:#fff;font-weight:800;font-size:17px;letter-spacing:2px;
+  }
+  .apply-vcard .visa-v{
+    position:absolute;bottom:16px;left:16px;
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    color:#fff;font-weight:900;font-style:italic;font-size:19px;letter-spacing:1px;
+  }
+  .apply-name{
+    text-align:center;
+    font-size:21.5px;
+    font-weight:800;
+    color:var(--text-primary);
+    margin-bottom:8px;
+  }
+  .apply-desc{
+    text-align:center;
+    font-size:16.5px;
+    color:var(--text-secondary);
+    line-height:1.6;
+    padding:0 16px;
+  }
+
+  /* ---- Login view: pushed sub-screen reached from any guest-gated action
+         (儲值/登入/立即體驗/市場掛單/C2C/資產). 轉帳 is the one exception — it keeps
+         its own preview screen with a disabled confirm button instead. ---- */
+  #view-login,#view-register{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-login[hidden],#view-register[hidden]{display:none;}
+  .login-hd{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .login-hd .tf-title{flex:1;margin-right:0;}
+  .login-hero{margin-bottom:24px;}
+  .login-hero h2{margin:0 0 6px;font-size:21.5px;font-weight:800;color:var(--text-primary);}
+  .login-hero p{margin:0;font-size:16.5px;color:var(--text-secondary);line-height:1.6;}
+
+  /* ---- Register view: centered hero, a size step above the app's normal
+         21.5px headline scale to carry the page (this is the one screen whose
+         job is to start a new account) — but no longer pinned to the old
+         reference screenshot's oversized 35px/900, and the subtitle uses the
+         app's own secondary-text token instead of a one-off grey. ---- */
+  .reg-hero{text-align:center;}
+  .reg-hero h2{font-size:26px;font-weight:800;}
+  .reg-hero p{font-size:17px;color:var(--text-secondary);}
+  .otp-btn{
+    flex:none;border:none;border-radius:8px;
+    background:var(--accent-blue);color:#fff;
+    font-family:inherit;font-size:18px;font-weight:700;
+    padding:6px 12px;cursor:pointer;
+  }
+  .login-field{margin-bottom:16px;}
+  .login-field label{
+    display:block;
+    font-size:16.5px;
+    font-weight:500;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+  }
+  .login-input-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--divider);
+    border-radius:14px;
+    padding:12px 14px;
+  }
+  .login-input-row svg{flex:none;color:var(--text-tertiary);}
+  .login-input-row input{
+    flex:1;
+    min-width:0;
+    border:none;
+    outline:none;
+    background:none;
+    font-family:inherit;
+    font-size:18.5px;
+    color:var(--text-primary);
+  }
+  .login-input-row input::placeholder{color:var(--text-tertiary);}
+  .login-input-row .eye-btn{
+    flex:none;
+    background:none;
+    border:none;
+    padding:0;
+    color:var(--text-tertiary);
+    cursor:pointer;
+    display:flex;
+  }
+  .login-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+  }
+  .login-remember{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:16.5px;
+    color:var(--text-primary);
+    cursor:pointer;
+  }
+  .login-remember input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent-blue);}
+  .login-forgot{font-size:16.5px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
+  .login-signup{
+    text-align:center;
+    margin-top:16px;
+    font-size:16.5px;
+    color:var(--text-secondary);
+  }
+  .login-signup a{color:var(--accent-blue);font-weight:700;text-decoration:none;}
+
+  /* ---- Card view header: distinct from the home .hd (this one is just a centered title,
+         no back button — the shared bottom nav is how you leave this view) ---- */
+  .card-hd{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:40px;
+    margin-bottom:22px;
+  }
+  .hd-title{
+    text-align:center;
+    font-size:21.5px;
+    font-weight:700;
+    color:var(--text-primary);
+  }
+
+  /* ---- Card view: big card preview ---- */
+  .preview-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:22px;
+  }
+  .vcard{
+    width:92%;
+    max-width:320px;
+    aspect-ratio:1.586/1;
+    border-radius:16px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 14px 32px rgba(11,30,77,0.22);
+    transition:background .35s ease;
+  }
+  .vcard.tier-regular{background:linear-gradient(135deg,#1B1F3B,#0B1E4D 45%,#0052FF);}
+  .vcard.tier-premium{background:linear-gradient(135deg,#241835,#3B0B4D 45%,#8B2FD1);}
+  .vcard.tier-elite{background:linear-gradient(135deg,#141414,#1c1c1c 45%,#3a2f0f);}
+  .vcard .card-brand{
+    position:absolute;top:18px;left:20px;
+    color:#fff;font-weight:800;font-size:18px;letter-spacing:2px;
+  }
+  .vcard .card-visa{
+    position:absolute;bottom:16px;right:20px;
+    color:#fff;font-weight:900;font-style:italic;font-size:22.5px;letter-spacing:1px;
+  }
+
+  /* ---- Tier picker: tapping one swaps the preview image + details below ---- */
+  .tier-picker{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .tier-opt{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:7px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    color:var(--text-secondary);
+  }
+  .tier-opt .swatch{
+    width:52px;height:33px;
+    border-radius:7px;
+    border:2px solid transparent;
+    transition:border-color .2s ease,transform .2s ease;
+  }
+  .tier-opt.regular .swatch{background:linear-gradient(135deg,#1B1F3B,#0B1E4D 45%,#0052FF);}
+  .tier-opt.premium .swatch{background:linear-gradient(135deg,#241835,#3B0B4D 45%,#8B2FD1);}
+  .tier-opt.elite .swatch{background:linear-gradient(135deg,#141414,#1c1c1c 45%,#3a2f0f);}
+  .tier-opt .label{font-size:17px;font-weight:500;}
+  .tier-opt.active .swatch{border-color:var(--accent-blue);transform:translateY(-3px);}
+  .tier-opt.active .label{color:var(--accent-blue);}
+
+  /* ---- Details: plain centered layout (no boxed background), a small tag,
+         the tier name, then a short feature list with check marks ---- */
+  .detail{
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .detail .tag{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 13px;
+    border-radius:999px;
+    background:var(--accent-blue-soft);
+    color:var(--accent-blue);
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .detail .name{font-size:21.5px;font-weight:800;color:var(--text-primary);margin-bottom:18px;}
+  .feat-list{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    background:var(--grey-btn);
+    border-radius:14px;
+    padding:14px 18px;
+    text-align:left;
+  }
+  .feat-list .feat{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:16.5px;
+    color:var(--text-secondary);
+  }
+  .feat-list .feat svg{color:var(--accent-blue);flex:none;}
+  .divider{border:none;border-top:1px solid var(--divider);margin:0 0 20px;}
+
+  .spacer{flex:1;}
+
+  .cta{
+    display:block;
+    width:100%;
+    border:none;
+    border-radius:999px;
+    height:56px;
+    background:var(--accent-blue);
+    color:#fff;
+    font-size:19px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    margin-bottom:18px;
+  }
+
+  /* ---- Bottom nav: shared chrome across every view. Same light/blue visual language
+         as before; tapping 首頁/卡片 swaps which view is visible via JS (no page reload). ---- */
+  .navbar-wrap{
+    position:sticky;
+    bottom:0;
+    padding:11px 14px calc(11px + env(safe-area-inset-bottom,0px));
+    background:#fff;
+    border-top:1px solid var(--divider);
+    margin-top:auto;
+  }
+  .navbar{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    align-items:center;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:10px 4px;
+    border-radius:14px;
+    color:var(--nav-icon);
+    font-size:13.5px;
+    font-weight:600;
+    min-height:58px;
+    text-decoration:none;
+    cursor:pointer;
+    user-select:none;
+  }
+  .nav-item svg{width:28px;height:28px;transition:stroke-width .15s ease;}
+  .nav-item.active{
+    background:var(--accent-blue-soft);
+    color:var(--accent-blue);
+  }
+
+  /* ---- C2C market flow: 市場掛單 / 我的掛單 / 交易紀錄, reached from the bottom nav,
+         share their own 4-item sub bottom nav (C2C/訂單/掛單/個人) instead of the main
+         5-item nav, mirroring the reference app's separate C2C module chrome. 掛單 (post)
+         and the buy-order screen are pushed further still, with their own back button. ---- */
+  #view-market,#view-post-ad,#view-buy-order{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-market[hidden],#view-post-ad[hidden],#view-buy-order[hidden]{display:none;}
+
+  .mkt-hd{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .mkt-pill{
+    flex:none;border:1.5px solid var(--divider);border-radius:999px;
+    background:#fff;height:32px;padding:0 14px;
+    font-family:inherit;font-size:16.5px;font-weight:700;color:var(--text-primary);
+  }
+
+  .pill-tabs{display:flex;gap:4px;background:var(--grey-btn);border-radius:999px;padding:4px;margin-bottom:14px;}
+  .pill-tabs button{
+    flex:1;border:none;background:none;border-radius:999px;height:36px;
+    font-family:inherit;font-size:17px;font-weight:700;color:var(--text-secondary);cursor:pointer;
+  }
+  .pill-tabs button.active{background:#fff;color:var(--accent-blue);box-shadow:0 1px 4px rgba(17,19,24,0.08);}
+
+  .chip-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .chip-tabs button{
+    display:flex;align-items:center;gap:2px;
+    border:1.5px solid var(--divider);background:#fff;border-radius:999px;
+    height:30px;padding:0 14px;font-family:inherit;font-size:16px;font-weight:600;
+    color:var(--text-secondary);cursor:pointer;
+  }
+  .chip-tabs button.active{border-color:var(--accent-blue);background:var(--accent-blue-soft);color:var(--accent-blue);}
+
+  .info-banner{
+    display:flex;gap:8px;align-items:flex-start;
+    background:var(--accent-blue-soft);color:var(--accent-blue);
+    border-radius:12px;padding:10px 12px;margin-bottom:14px;
+  }
+  .info-banner svg{flex:none;margin-top:1px;}
+  .info-banner span{font-size:15.5px;line-height:1.6;}
+
+  .mkt-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .mkt-toolbar-right{display:flex;gap:8px;}
+  .mkt-toolbar-btn{
+    display:flex;align-items:center;gap:4px;
+    border:none;border-radius:999px;height:30px;padding:0 12px;
+    font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+  }
+  .mkt-toolbar-btn.solid{background:var(--accent-blue);color:#fff;}
+  .mkt-toolbar-btn.outline{background:#fff;border:1.5px solid var(--divider);color:var(--text-primary);}
+
+  .ad-card{
+    background:#fff;border:1px solid var(--divider);border-radius:16px;
+    padding:14px 16px;margin-bottom:12px;
+  }
+  .ad-card-top{display:flex;align-items:center;gap:10px;}
+  .ad-avatar{
+    width:42px;height:42px;border-radius:50%;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:17px;font-weight:700;
+  }
+  .ad-card-name{flex:1;min-width:0;}
+  .ad-card-name .n{font-size:17.5px;font-weight:700;color:var(--text-primary);}
+  .ad-card-name .s{font-size:15px;color:var(--text-tertiary);margin-top:1px;}
+  .ad-card-price{text-align:right;flex:none;}
+  .ad-card-price .p{font-size:19px;font-weight:800;color:var(--accent-blue);}
+  .ad-card-price .u{font-size:13.5px;font-weight:600;color:var(--text-tertiary);margin-top:1px;}
+  .ad-card-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;}
+  .ad-card-stats{display:flex;gap:16px;}
+  .ad-card-stats span{font-size:15px;color:var(--text-tertiary);line-height:1.5;}
+  .ad-card-stats b{display:block;font-size:16.5px;font-weight:700;color:var(--text-primary);}
+  .ad-buy-btn{
+    flex:none;border:none;border-radius:999px;height:32px;padding:0 18px;
+    background:var(--accent-blue);color:#fff;font-family:inherit;font-size:16.5px;font-weight:700;cursor:pointer;
+  }
+
+  .empty-state{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    gap:12px;padding:70px 24px 40px;color:var(--text-tertiary);
+  }
+  .empty-state p{margin:0;font-size:17px;color:var(--text-secondary);}
+  .empty-state .cta{width:auto;padding:0 24px;height:42px;font-size:17.5px;margin:0;}
+
+  .select-row{display:flex;gap:10px;margin-bottom:14px;}
+  .select-row>div{flex:1;min-width:0;}
+  .select-box{
+    display:flex;align-items:center;justify-content:space-between;
+    border:1px solid var(--divider);border-radius:14px;height:50px;padding:0 14px;
+    font-size:18px;font-weight:700;color:var(--text-primary);
+  }
+  .select-box svg{color:var(--text-tertiary);}
+
+  .field-label{font-size:16.5px;font-weight:500;color:var(--text-secondary);margin-bottom:8px;}
+  .field-row{
+    display:flex;align-items:center;gap:8px;
+    border:1px solid var(--divider);border-radius:16px;
+    padding:12px 14px;margin-bottom:8px;
+  }
+  .field-row input{
+    flex:1;min-width:0;border:none;outline:none;background:none;
+    font-family:inherit;font-size:20px;font-weight:700;color:var(--text-primary);
+  }
+  .field-row input::placeholder{color:var(--text-tertiary);font-weight:500;}
+  .field-row .unit{font-size:17px;font-weight:600;color:var(--text-secondary);flex:none;}
+  .field-hint{font-size:16px;color:var(--text-tertiary);margin:-2px 0 14px;}
+  .range-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .range-row .field-row{flex:1;margin-bottom:0;}
+  .range-row .tilde{color:var(--text-tertiary);font-size:17px;}
+  .ta-input{
+    width:100%;border:1px solid var(--divider);border-radius:16px;
+    padding:12px 14px;font-family:inherit;font-size:18.5px;color:var(--text-primary);
+    resize:none;height:80px;margin-bottom:6px;outline:none;
+  }
+  .ta-input::placeholder{color:var(--text-tertiary);}
+  .warn-box{
+    background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;
+    font-size:15.5px;line-height:1.7;padding:10px 12px;border-radius:12px;margin-bottom:16px;
+  }
+
+  .bo-price{text-align:center;font-size:17px;color:var(--text-secondary);margin-bottom:12px;}
+  .bo-price b{color:var(--text-primary);font-size:18px;}
+  .bo-panel{background:#F9FAFB;border:1px solid var(--divider);border-radius:16px;padding:14px;margin-bottom:14px;}
+  .bo-amount-row{display:flex;align-items:baseline;gap:8px;margin:4px 0 6px;}
+  .bo-amount-input{
+    flex:1;min-width:0;border:none;outline:none;background:none;
+    font-family:inherit;font-size:31px;font-weight:800;color:var(--text-primary);
+  }
+  .bo-amount-input::placeholder{color:var(--text-tertiary);}
+  .bo-unit{font-size:17px;font-weight:600;color:var(--text-primary);flex:none;}
+  .bo-max{
+    flex:none;border:1.5px solid var(--accent-blue);background:none;color:var(--accent-blue);
+    border-radius:999px;height:26px;padding:0 12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
+  }
+  .bo-sep{border:none;border-top:1px solid var(--divider);margin:10px 0;}
+  .bo-note{font-size:15.5px;color:var(--text-tertiary);margin:4px 0;}
+  .bo-line{font-size:16.5px;color:var(--text-primary);margin:4px 0;}
+  .bo-line b{font-weight:700;}
+  .bo-card{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--grey-btn);border-radius:14px;padding:12px 16px;margin-bottom:10px;
+  }
+  .bo-card .l{font-size:15.5px;color:var(--text-secondary);}
+  .bo-card .v{font-size:18px;font-weight:700;color:var(--text-primary);margin-top:2px;}
+  .bo-link-btn{
+    flex:none;border:1.5px solid var(--divider);background:#fff;color:var(--text-primary);
+    border-radius:999px;height:30px;padding:0 14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+  }
+  .merchant-row{
+    display:flex;align-items:center;gap:10px;
+    background:var(--grey-btn);border-radius:14px;padding:12px 16px;margin-bottom:16px;
+  }
+  .merchant-row .ad-avatar{width:36px;height:36px;font-size:18px;}
+  .merchant-row .n{flex:1;font-size:17px;font-weight:700;color:var(--text-primary);}
+  .merchant-row svg{color:var(--text-tertiary);}
+
+  /* ---- Sub bottom nav: shown instead of the main nav while inside the C2C market
+         module (市場掛單/我的掛單/交易紀錄); reuses .nav-item's look so it reads as
+         the same nav language, just a 4-item row instead of 5. ---- */
+  .subnav-wrap{
+    position:sticky;bottom:0;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+    background:#fff;border-top:1px solid var(--divider);margin-top:auto;
+  }
+  .subnav{display:grid;grid-template-columns:repeat(4,1fr);align-items:center;}
+
+  /* ---- Guest profile landing: pushed screen reached via the 個人 nav tab, in the
+         app's own light design language (same tokens/scale as home, card, login) —
+         not the dark reference screenshot it was first built from. ---- */
+  #view-guest-me{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  #view-guest-me[hidden]{display:none;}
+  .gm-hero{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:36px 0 40px;
+  }
+  .gm-logo{width:60px;height:65px;margin-bottom:16px;display:block;}
+  .gm-title{margin:0;font-size:21.5px;font-weight:800;color:var(--text-primary);}
+  .gm-row{
+    display:flex;align-items:center;gap:12px;
+    cursor:pointer;
+  }
+  .gm-row-card{
+    border:1px solid var(--divider);border-radius:14px;
+    padding:14px 16px;
+  }
+  .gm-row-ic{
+    flex:none;width:40px;height:40px;border-radius:12px;
+    background:var(--accent-blue-soft);color:var(--accent-blue);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .gm-row-title{flex:1;font-size:18px;font-weight:600;color:var(--text-primary);}
+  .gm-row-trail{flex:none;display:flex;align-items:center;gap:6px;color:var(--text-tertiary);}
+  .gm-version{font-size:16.5px;color:var(--text-tertiary);}
+
+  #view-about{display:flex;flex-direction:column;flex:1;}
+  #view-about[hidden]{display:none;}
+  .about-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:8px 0 22px;}
+  .about-logo-wrap img{width:56px;height:64px;}
+  .about-logo-wrap .about-version{font-size:16.5px;color:var(--text-tertiary);}
+  .about-card{
+    background:var(--card-bg);border:1px solid var(--divider);border-radius:16px;
+    padding:4px 16px;margin-bottom:12px;
+  }
+  .about-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 0;cursor:pointer;
+  }
+  .about-row:not(:last-child){border-bottom:1px solid var(--divider);}
+  .about-row-title{font-size:18px;font-weight:600;color:var(--text-primary);}
+  .about-row-trail{flex:none;display:flex;align-items:center;gap:6px;color:var(--text-tertiary);}
+  .about-row-val{font-size:16.5px;font-weight:600;color:var(--text-primary);}
+  .about-row-val.link{color:var(--accent-blue);}
+  .about-footer{margin-top:20px;text-align:center;font-size:16.5px;color:var(--text-tertiary);}
+
+  #view-announce-list, #view-announce-detail, #view-customer-service{display:flex;flex-direction:column;flex:1;}
+  #view-announce-list[hidden], #view-announce-detail[hidden], #view-customer-service[hidden]{display:none;}
+
+  .ann-row{display:flex;align-items:center;gap:12px;padding:14px 0;cursor:pointer;}
+  .ann-row:not(:last-child){border-bottom:1px solid var(--divider);}
+  .ann-ic{
+    flex:none;width:40px;height:40px;border-radius:12px;
+    background:var(--accent-blue-soft);color:var(--accent-blue);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ann-main{flex:1;min-width:0;}
+  .ann-title{font-size:18px;font-weight:600;color:var(--text-primary);}
+  .ann-date{font-size:16.5px;color:var(--text-tertiary);margin-top:2px;}
+  .ann-trail{flex:none;color:var(--text-tertiary);}
+
+  .ann-detail-title{font-size:21.5px;font-weight:800;color:var(--text-primary);margin:4px 0 14px;}
+  .ann-detail-body{font-size:17px;line-height:1.9;color:#374151;}
+  .ann-detail-body ul{margin:10px 0 14px;padding-left:18px;line-height:2;}
+
+  .svc-intro-title{font-size:21.5px;font-weight:800;color:var(--text-primary);margin:4px 0 4px;}
+  .svc-intro-sub{font-size:16.5px;color:var(--text-secondary);margin:0 0 18px;}
+  .svc-row{
+    display:flex;align-items:center;gap:12px;
+    background:var(--card-bg);border:1px solid var(--divider);border-radius:16px;
+    padding:14px 16px;margin-bottom:10px;cursor:pointer;
+  }
+  .svc-row.rec{background:var(--accent-blue-soft);border-color:#BFDBFE;}
+  .svc-ic{
+    flex:none;width:48px;height:48px;border-radius:14px;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .svc-ic.whatsapp{background:#25D366;}
+  .svc-ic.telegram{background:#229ED9;}
+  .svc-ic.online{background:var(--accent-blue);}
+  .svc-main{flex:1;min-width:0;}
+  .svc-title{font-size:18px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:6px;}
+  .svc-badge{font-size:13.5px;font-weight:700;color:var(--accent-blue);background:#fff;border:1px solid var(--accent-blue);border-radius:6px;padding:1px 6px;}
+  .svc-sub{font-size:16.5px;color:var(--text-secondary);margin-top:2px;}
+  .svc-trail{flex:none;color:var(--text-tertiary);}
+  .svc-note{font-size:16.5px;color:var(--text-secondary);margin-top:16px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="screen">
+
+    <div id="view-home">
+
+      <div class="hd">
+        <div class="grow"></div>
+        <div class="hd-iconbtn" onclick="goTo('customer-service')" role="button" aria-label="聯繫客服">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <div class="hd-iconbtn" onclick="goTo('announce-list')" role="button" aria-label="公告中心">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+      </div>
+
+      <div class="guest-hero">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </div>
+        <h2>登入即可查看您的資產</h2>
+        <p>登入或註冊帳戶，即可使用儲值、轉帳與完整交易功能</p>
+      </div>
+
+      <div class="actions">
+        <div class="action-btn" onclick="goTo('login')" style="cursor:pointer;">
+          <div class="action-icon primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          </div>
+          <div class="action-label">儲值</div>
+        </div>
+        <div class="action-btn" onclick="goTo('transfer')" style="cursor:pointer;">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 3 4 4-4 4"/><path d="M21 7H3"/><path d="m7 21-4-4 4-4"/><path d="M3 17h18"/></svg>
+          </div>
+          <div class="action-label">轉帳</div>
+        </div>
+        <div class="action-btn" onclick="goTo('login')" style="cursor:pointer;">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>
+          </div>
+          <div class="action-label">登入</div>
+        </div>
+        <div class="action-btn" onclick="goTo('register')" style="cursor:pointer;">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M19 8v6"/><path d="M16 11h6"/></svg>
+          </div>
+          <div class="action-label">註冊</div>
+        </div>
+      </div>
+
+      <div class="banner-viewport" id="bannerViewport">
+        <div class="banner-track" id="bannerTrack">
+          <div class="banner-slide cold" data-slide="0">
+            <div class="hexbg"></div>
+            <div class="cold-device"></div>
+            <div class="txt">冷錢包<br><span style="font-weight:600;font-size:16px;opacity:.85;">邁向加密世界</span></div>
+          </div>
+          <div class="banner-slide eco" data-slide="1">
+            <div class="banner-brand"><span class="logo">E</span>Ecrypto 加密易</div>
+            <div class="banner-title">全球<span>虛擬卡</span></div>
+            <div class="banner-feat">✓ 支持 Apple Pay / Google Pay</div>
+            <div class="banner-feat">✓ 全球通用，安全便捷</div>
+            <div class="banner-cta">立即申請 →</div>
+            <div class="eco-card"></div>
+          </div>
+          <div class="banner-slide bito" data-slide="2">
+            <div class="bito-decor d1"></div>
+            <div class="bito-decor d2"></div>
+            <div class="banner-title" style="color:#fff;position:relative;z-index:1;">幣託<br>BitoPro</div>
+            <div class="banner-feat" style="position:relative;z-index:1;">值得信賴的加密貨幣交易夥伴</div>
+          </div>
+          <div class="banner-slide c2c" data-slide="3">
+            <div class="c2c-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </div>
+            <div class="badge">C2C 交易</div>
+            <div class="banner-title">安全便捷<br>全球暢行</div>
+            <div class="banner-feat">多幣資產同步，快速安全轉帳</div>
+          </div>
+        </div>
+      </div>
+      <div class="dots" id="bannerDots">
+        <button class="dot active" data-goto="0" aria-label="第 1 張"></button>
+        <button class="dot" data-goto="1" aria-label="第 2 張"></button>
+        <button class="dot" data-goto="2" aria-label="第 3 張"></button>
+        <button class="dot" data-goto="3" aria-label="第 4 張"></button>
+      </div>
+
+      <div class="section-head">
+        <h3>最新消息</h3>
+        <a href="#">查看全部</a>
+      </div>
+      <div class="news-list">
+        <div class="news-item">
+          <div class="dot-ic"></div>
+          <div class="txt">【公告】平台功能優化通知</div>
+          <div class="date">09/14</div>
+        </div>
+        <div class="news-item">
+          <div class="dot-ic"></div>
+          <div class="txt">【新功能】新增 USDT-TRC20 快速儲值</div>
+          <div class="date">09/10</div>
+        </div>
+        <div class="news-item">
+          <div class="dot-ic"></div>
+          <div class="txt">【教學】3 分鐘完成身份驗證</div>
+          <div class="date">09/05</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="view-card" hidden>
+
+      <div class="card-hd">
+        <div class="hd-title">卡片</div>
+      </div>
+
+      <div class="preview-wrap">
+        <div class="vcard tier-regular" id="vcard">
+          <span class="card-brand">ECRYPTO</span>
+          <span class="card-visa">VISA</span>
+        </div>
+      </div>
+
+      <div class="tier-picker" id="tierPicker">
+        <button class="tier-opt regular active" data-tier="regular">
+          <div class="swatch"></div>
+          <div class="label">常規卡</div>
+        </button>
+        <button class="tier-opt premium" data-tier="premium">
+          <div class="swatch"></div>
+          <div class="label">高級卡</div>
+        </button>
+        <button class="tier-opt elite" data-tier="elite">
+          <div class="swatch"></div>
+          <div class="label">尊爵卡</div>
+        </button>
+      </div>
+
+      <div class="detail">
+        <div class="tag" id="tierTag">適合日常消費</div>
+        <div class="name" id="tierName">常規卡</div>
+        <div class="feat-list" id="tierFeats">
+          <div class="feat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>免年費</div>
+          <div class="feat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>即時開卡</div>
+          <div class="feat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>全球商家通用</div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <hr class="divider">
+      <button class="cta" id="ctaBtn">立即體驗</button>
+
+    </div>
+
+    <div id="view-transfer" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">轉帳</div>
+      </div>
+
+      <div class="tf-route-card">
+        <div class="tf-route-row">
+          <span class="tf-route-label">發送</span>
+          <span class="tf-route-value">C2C 錢包</span>
+        </div>
+        <hr class="tf-route-divider">
+        <div class="tf-route-row">
+          <span class="tf-route-label">接收</span>
+          <span class="tf-route-value">主錢包</span>
+        </div>
+      </div>
+
+      <div class="tf-swap-wrap">
+        <button class="tf-swap-btn" id="tfSwapBtn" aria-label="交換發送/接收">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3v14"/><path d="m13 13 4 4 4-4"/><path d="M7 21V7"/><path d="m11 11-4-4-4 4"/></svg>
+        </button>
+      </div>
+
+      <button class="tf-coin-select">USDT</button>
+
+      <div class="tf-amount-label">轉帳數量</div>
+      <div class="tf-amount-row">
+        <input class="tf-amount-input" id="tfAmountInput" type="text" inputmode="decimal" placeholder="0.00">
+        <span class="tf-amount-unit">USDT</span>
+        <button class="tf-amount-all" id="tfAllBtn">全部</button>
+      </div>
+      <div class="tf-available">可用：<span id="tfAvailable">0.00 USDT</span></div>
+
+      <div class="spacer"></div>
+
+      <button class="cta" id="tfConfirmBtn" onclick="goTo('login')">確認轉帳</button>
+
+    </div>
+
+    <div id="view-card-apply" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('card')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">選擇卡片類型</div>
+      </div>
+
+      <div class="apply-wrap">
+        <div class="apply-vcard tier-regular" id="applyVcard">
+          <span class="chip-badge"></span>
+          <span class="brand-v">ECRYPTO</span>
+          <span class="visa-v">VISA</span>
+        </div>
+      </div>
+
+      <div class="apply-name" id="applyName">常規卡</div>
+      <div class="apply-desc" id="applyDesc">免年費，即時開卡，全球商家通用</div>
+
+      <div class="spacer"></div>
+
+      <button class="cta" id="applyConfirmBtn" disabled title="請先登入後再申請卡片">確認申請</button>
+
+    </div>
+
+    <div id="view-login" hidden>
+
+      <div class="login-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">登入</div>
+        <button class="tf-back" aria-label="切換語言">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+        </button>
+      </div>
+
+      <div class="login-hero">
+        <h2>歡迎回來</h2>
+        <p>在下方輸入您的電子郵件和密碼以登入</p>
+      </div>
+
+      <div class="login-field">
+        <label for="loginEmail">電子郵件</label>
+        <div class="login-input-row">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          <input id="loginEmail" type="email" placeholder="請輸入您的電子郵件">
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="loginPassword">密碼</label>
+        <div class="login-input-row">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input id="loginPassword" type="password" placeholder="請輸入您的密碼">
+          <button type="button" class="eye-btn" id="loginEyeBtn" aria-label="顯示密碼">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-row">
+        <label class="login-remember">
+          <input type="checkbox">
+          記住我
+        </label>
+        <a href="#" class="login-forgot">忘記密碼？</a>
+      </div>
+
+      <button class="cta" id="loginSubmitBtn">登入</button>
+
+      <div class="login-signup">還沒有帳戶？<a href="#" onclick="goTo('register');return false;">註冊</a></div>
+
+    </div>
+
+    <div id="view-register" hidden>
+
+      <div class="login-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">註冊</div>
+        <button class="tf-back" aria-label="切換語言">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+        </button>
+      </div>
+
+      <div class="login-hero reg-hero">
+        <h2>建立您的帳戶</h2>
+        <p>歡迎！請輸入您的詳細資料。</p>
+      </div>
+
+      <div class="login-field">
+        <label for="regEmail">電子郵件</label>
+        <div class="login-input-row">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          <input id="regEmail" type="email" placeholder="請輸入您的電子郵件">
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="regOtp">電子郵件驗證碼</label>
+        <div class="login-input-row" style="padding-right:6px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m10.83 12.17 7.76-7.76a1.5 1.5 0 0 1 2.12 0l.88.88a1.5 1.5 0 0 1 0 2.12l-1.5 1.5"/><path d="m17 6 2 2"/><path d="m14.5 8.5 2 2"/></svg>
+          <input id="regOtp" type="text" placeholder="請輸入驗證碼">
+          <button type="button" class="otp-btn" id="regOtpBtn">獲取驗證碼</button>
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="regPassword">密碼</label>
+        <div class="login-input-row">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input id="regPassword" type="password" placeholder="請輸入您的密碼">
+          <button type="button" class="eye-btn" id="regEyeBtn1" aria-label="顯示密碼">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 4.22-5.06"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="m1 1 22 22"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="cta" id="regSubmitBtn">建立帳戶</button>
+
+      <div class="login-signup">已經有帳戶？<a href="#" onclick="goTo('login');return false;">登入</a></div>
+
+    </div>
+
+    <div id="view-guest-me" hidden>
+
+      <div class="gm-hero">
+        <img class="gm-logo" src="data:image/png;base64,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" alt="Ecrypto">
+        <h1 class="gm-title">歡迎來到 Ecrypto</h1>
+      </div>
+
+      <div class="gm-row gm-row-card" onclick="goTo('about')">
+        <div class="gm-row-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
+        <div class="gm-row-title">關於我們</div>
+        <div class="gm-row-trail"><span class="gm-version">V3.14.0</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+
+    </div>
+
+    <div id="view-about" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('guest-me')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">關於我們</div>
+      </div>
+
+      <div class="about-logo-wrap">
+        <img src="data:image/png;base64,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" alt="Ecrypto">
+        <div class="about-version">版本 3.14.0</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-row">
+          <div class="about-row-title">App 版本升級</div>
+          <div class="about-row-trail"><span class="about-row-val">v3.14.0</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+        <div class="about-row">
+          <div class="about-row-title">隱私政策</div>
+          <div class="about-row-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+        <div class="about-row">
+          <div class="about-row-title">服務條款</div>
+          <div class="about-row-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-row" style="cursor:default;">
+          <div class="about-row-title">官方網站</div>
+          <div class="about-row-val link">www.ecrypto.cc</div>
+        </div>
+        <div class="about-row" style="cursor:default;">
+          <div class="about-row-title">客服信箱</div>
+          <div class="about-row-val">ecryptosupport@sfwtechco.com</div>
+        </div>
+      </div>
+
+      <div class="about-footer">© 2026 Ecrypto. All rights reserved.</div>
+
+    </div>
+
+    <div id="view-announce-list" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">公告中心</div>
+      </div>
+
+      <div class="about-card">
+        <div class="ann-row" onclick="goTo('announce-detail')">
+          <div class="ann-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="ann-main">
+            <div class="ann-title">【公告】平台功能優化通知</div>
+            <div class="ann-date">2025-11-07 23:55:36</div>
+          </div>
+          <div class="ann-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="view-announce-detail" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('announce-list')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">公告詳情</div>
+      </div>
+
+      <div class="ann-detail-title">【公告】平台功能優化通知</div>
+      <div class="ann-detail-body">
+        親愛的用戶您好：<br>為提升平台整體效能與使用體驗，本交易所將於 <b>2025年11月10日 03:00（UTC+8）</b> 進行系統優化作業。此次更新內容包含：
+        <ul>
+          <li>交易撮合引擎效能提升</li>
+          <li>介面載入速度優化</li>
+          <li>部分功能介面調整</li>
+        </ul>
+        在此期間，平台主要服務將維持正常運作，如遇短暫延遲，請稍候片刻再試。感謝您一直以來對本平台的支持與信任。
+      </div>
+
+      <div class="spacer"></div>
+      <button class="cta" onclick="goTo('announce-list')">我知道了</button>
+
+    </div>
+
+    <div id="view-customer-service" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">聯繫客服</div>
+      </div>
+
+      <div class="svc-intro-title">請選擇您偏好的客服管道</div>
+      <div class="svc-intro-sub">我們將依照您選擇的方式為您服務，回覆時間依管道略有不同</div>
+
+      <div class="svc-row" onclick="alert('即將離開 App（Demo 未提供外部跳轉）')">
+        <div class="svc-ic whatsapp"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="svc-main">
+          <div class="svc-title">WhatsApp</div>
+          <div class="svc-sub">另開 WhatsApp App 與客服對話</div>
+        </div>
+        <div class="svc-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+
+      <div class="svc-row" onclick="alert('即將離開 App（Demo 未提供外部跳轉）')">
+        <div class="svc-ic telegram"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div>
+        <div class="svc-main">
+          <div class="svc-title">Telegram</div>
+          <div class="svc-sub">另開 Telegram App 與客服對話</div>
+        </div>
+        <div class="svc-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+
+      <div class="svc-row rec" onclick="alert('（Demo 版本，未實際開啟線上客服）')">
+        <div class="svc-ic online"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <div class="svc-main">
+          <div class="svc-title">線上客服 <span class="svc-badge">推薦</span></div>
+          <div class="svc-sub">免離開 App，App 內即時對話</div>
+        </div>
+        <div class="svc-trail"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+
+      <div class="svc-note">選擇 WhatsApp 或 Telegram 會先跳出「即將離開 App」確認彈窗，確認後才開啟外部 App；選擇「線上客服」則直接在此 App 內開啟聊天視窗，無需跳轉。</div>
+
+    </div>
+
+    <div id="view-market" hidden>
+
+      <div class="mkt-hd">
+        <button class="tf-back" onclick="goTo('home')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div style="font-size:21.5px;font-weight:700;color:var(--text-primary);">市場掛單</div>
+        <div class="grow"></div>
+        <button class="mkt-pill">USDT</button>
+      </div>
+
+      <div class="pill-tabs" id="mktBuySellTabs">
+        <button class="active" data-panel="buy">購買</button>
+        <button data-panel="sell">出售</button>
+      </div>
+
+      <div class="mkt-toolbar">
+        <button class="mkt-toolbar-btn outline" style="pointer-events:none;">
+          金額
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="mkt-toolbar-right">
+          <button class="mkt-toolbar-btn solid" onclick="goTo('login')">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            刊登購買
+          </button>
+          <button class="mkt-toolbar-btn outline" onclick="goTo('login')">我的掛單</button>
+        </div>
+      </div>
+
+      <div class="info-banner">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span>目前顯示的是市場掛單。您刊登的掛單不會顯示於自己的買入／賣出列表，而是顯示於其他用戶的買入／賣出頁面。如需查看您的掛單，請前往「我的掛單」。</span>
+      </div>
+
+      <div id="mktBuyPanel">
+        <div class="ad-card">
+          <div class="ad-card-top">
+            <div class="ad-avatar" style="background:#A855C4;">測</div>
+            <div class="ad-card-name"><div class="n">測試星舟</div><div class="s">交易訂單數 0</div></div>
+            <div class="ad-card-price"><div class="p">7.80</div><div class="u">HKD/USDT</div></div>
+          </div>
+          <div class="ad-card-bottom">
+            <div class="ad-card-stats">
+              <span>可交易數量<b>20 USDT</b></span>
+              <span>單筆限額<b>10.00 - 100.00 HKD</b></span>
+            </div>
+            <button class="ad-buy-btn" onclick="goTo('login')">購買</button>
+          </div>
+        </div>
+        <div class="ad-card">
+          <div class="ad-card-top">
+            <div class="ad-avatar" style="background:#CA8A04;">e</div>
+            <div class="ad-card-name"><div class="n">erwewr</div><div class="s">交易訂單數 1</div></div>
+            <div class="ad-card-price"><div class="p">7.70</div><div class="u">HKD/USDT</div></div>
+          </div>
+          <div class="ad-card-bottom">
+            <div class="ad-card-stats">
+              <span>可交易數量<b>9.61 USDT</b></span>
+              <span>單筆限額<b>0 - 4 HKD</b></span>
+            </div>
+            <button class="ad-buy-btn" onclick="goTo('login')">購買</button>
+          </div>
+        </div>
+      </div>
+      <div id="mktSellPanel" hidden>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 15h6"/><path d="M9 11h1"/></svg>
+          <p>暫無訂單</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="view-post-ad" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('market')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">掛單</div>
+      </div>
+
+      <div class="pill-tabs">
+        <button class="active">買入</button>
+        <button>賣出</button>
+      </div>
+
+      <div class="select-row">
+        <div>
+          <div class="field-label">幣別</div>
+          <div class="select-box"><span>USDT</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+        </div>
+        <div>
+          <div class="field-label">法幣</div>
+          <div class="select-box"><span>HKD</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:0 0 8px;">
+        <span class="field-label" style="margin:0;">設置價格</span>
+        <button id="paMarketPriceBtn" style="border:none;background:none;color:var(--accent-blue);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;padding:0;">市場參考價：7.84 HKD</button>
+      </div>
+      <div class="field-row">
+        <input id="paPrice" placeholder="請輸入單價" inputmode="decimal">
+        <span class="unit">HKD</span>
+      </div>
+
+      <div class="field-label">交易數量</div>
+      <div class="field-row">
+        <input id="paQty" placeholder="請輸入數量" inputmode="decimal">
+        <span class="unit">USDT</span>
+      </div>
+      <div class="field-hint" id="paEquiv">≈ 0.00 HKD</div>
+
+      <div class="field-label">訂單限額</div>
+      <div class="range-row">
+        <div class="field-row"><input placeholder="最小" inputmode="decimal"><span class="unit">HKD</span></div>
+        <span class="tilde">~</span>
+        <div class="field-row"><input placeholder="最大" inputmode="decimal"><span class="unit">HKD</span></div>
+      </div>
+
+      <div class="field-label">交易說明</div>
+      <textarea class="ta-input" placeholder="選填，讓對方了解你的交易條件（最多 500 字）"></textarea>
+
+      <div class="warn-box">發布後將凍結 C2C 錢包 0 USDT（可用 0 USDT），成交後付給買方。</div>
+
+      <div class="spacer"></div>
+
+      <button class="cta" id="postAdBtn" disabled title="請先登入後再刊登掛單">發布掛單</button>
+
+    </div>
+
+    <div id="view-buy-order" hidden>
+
+      <div class="tf-hd">
+        <button class="tf-back" onclick="goTo('market')" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tf-title">購買 USDT</div>
+      </div>
+
+      <div class="bo-price">價格 <b>7.80 HKD</b></div>
+
+      <div class="bo-panel">
+        <div class="pill-tabs" style="margin-bottom:8px;">
+          <button class="active" style="pointer-events:none;">按金額</button>
+          <button style="pointer-events:none;">按數量</button>
+        </div>
+        <div class="bo-amount-row">
+          <input class="bo-amount-input" id="boAmount" inputmode="decimal" value="0.00">
+          <span class="bo-unit">HKD</span>
+          <button class="bo-max" id="boMaxBtn">最大</button>
+        </div>
+        <hr class="bo-sep">
+        <div class="bo-note">單筆訂單限額 10.00 - 100.00 HKD</div>
+        <div class="bo-line">收到金額 <b id="boReceive">0 USDT</b></div>
+        <div class="bo-line">手續費 <b>0</b></div>
+      </div>
+
+      <div class="bo-card">
+        <div><div class="l">C2C 錢包可用</div><div class="v">0.00 HKD</div></div>
+        <button class="bo-link-btn" onclick="goTo('transfer')">轉帳</button>
+      </div>
+
+      <div class="merchant-row">
+        <div class="ad-avatar" style="background:#A855C4;">測</div>
+        <div class="n">測試星舟</div>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="spacer"></div>
+
+      <button class="cta" id="buyOrderBtn" disabled title="請先登入後再購買">購買</button>
+
+    </div>
+
+    <div class="navbar-wrap" id="navbarWrap">
+      <div class="navbar">
+        <div class="nav-item active" id="navHome" onclick="goTo('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          首頁
+        </div>
+        <div class="nav-item" id="navCard" onclick="goTo('card')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          卡片
+        </div>
+        <div class="nav-item" onclick="goTo('market')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12a4.3 4.1 0 0 1 8.6 0z" fill="currentColor" stroke="none"/><circle cx="6.5" cy="5.3" r="2.2" fill="currentColor" stroke="none"/><path d="M13 23.3a4 3.6 0 0 1 8 0z" fill="currentColor" stroke="none"/><circle cx="17" cy="15.5" r="2" fill="currentColor" stroke="none"/><path d="M14 4H20V10"/><path d="M10 21H4V15"/></svg>
+          C2C
+        </div>
+        <div class="nav-item" onclick="goTo('login')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3h-4a2 2 0 0 1 0-4Z"/></svg>
+          資產
+        </div>
+        <div class="nav-item" id="navMe" onclick="goTo('guest-me')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          個人
+        </div>
+      </div>
+    </div>
+
+    <div class="subnav-wrap" id="subnavWrap" hidden>
+      <div class="subnav">
+        <div class="nav-item" id="subC2C" onclick="goTo('market')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12a4.3 4.1 0 0 1 8.6 0z" fill="currentColor" stroke="none"/><circle cx="6.5" cy="5.3" r="2.2" fill="currentColor" stroke="none"/><path d="M13 23.3a4 3.6 0 0 1 8 0z" fill="currentColor" stroke="none"/><circle cx="17" cy="15.5" r="2" fill="currentColor" stroke="none"/><path d="M14 4H20V10"/><path d="M10 21H4V15"/></svg>
+          C2C
+        </div>
+        <div class="nav-item" onclick="goTo('login')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
+          訂單
+        </div>
+        <div class="nav-item" onclick="goTo('login')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42Z"/><circle cx="7" cy="7" r="1.2"/></svg>
+          掛單
+        </div>
+        <div class="nav-item" onclick="goTo('login')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          個人
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ---- Banner carousel (home view): swipe/scroll-driven, dots stay in sync ----
+(function(){
+  var viewport = document.getElementById('bannerViewport');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.banner-slide'));
+  var dots = Array.prototype.slice.call(document.querySelectorAll('#bannerDots .dot'));
+
+  function setActive(i){
+    dots.forEach(function(d, idx){ d.classList.toggle('active', idx === i); });
+  }
+
+  // Tapping a dot scrolls the carousel to that point in the track.
+  dots.forEach(function(dot){
+    dot.addEventListener('click', function(){
+      var i = Number(dot.dataset.goto);
+      var maxScroll = Math.max(1, viewport.scrollWidth - viewport.clientWidth);
+      var left = (i / (dots.length - 1)) * maxScroll;
+      viewport.scrollTo({ left: left, behavior: 'smooth' });
+    });
+  });
+
+  // Swiping/dragging the carousel updates the active dot to whichever slide is most in view.
+  var ticking = false;
+  viewport.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var maxScroll = Math.max(1, viewport.scrollWidth - viewport.clientWidth);
+      var progress = viewport.scrollLeft / maxScroll;
+      var idx = Math.round(progress * (dots.length - 1));
+      setActive(idx);
+      ticking = false;
+    });
+  }, { passive:true });
+})();
+
+// ---- Card tier switching (card view): tapping a tier swaps the preview + details.
+//      TIERS and the current selection live on window so the card-apply view below
+//      (reached via 立即體驗) can read whichever tier was picked. ----
+(function(){
+  var CHECK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  window.TIERS = {
+    regular: { name:'常規卡', tag:'適合日常消費', feats:['免年費','即時開卡','全球商家通用'], price:20 },
+    premium: { name:'高級卡', tag:'熱門推薦', feats:['免年費','即時開卡','全球商家通用'], price:50 },
+    elite:   { name:'尊爵卡', tag:'尊爵禮遇', feats:['免年費','即時開卡','全球商家通用'], price:100 }
+  };
+  window.currentTier = 'regular';
+  var vcard = document.getElementById('vcard');
+  var name = document.getElementById('tierName');
+  var tag = document.getElementById('tierTag');
+  var featsEl = document.getElementById('tierFeats');
+  var opts = Array.prototype.slice.call(document.querySelectorAll('.tier-opt'));
+
+  function select(tier){
+    window.currentTier = tier;
+    opts.forEach(function(o){ o.classList.toggle('active', o.dataset.tier === tier); });
+    vcard.className = 'vcard tier-' + tier;
+    var t = window.TIERS[tier];
+    name.textContent = t.name;
+    tag.textContent = t.tag;
+    featsEl.innerHTML = t.feats.map(function(f){ return '<div class="feat">' + CHECK + f + '</div>'; }).join('');
+  }
+
+  opts.forEach(function(opt){
+    opt.addEventListener('click', function(){ select(opt.dataset.tier); });
+  });
+
+  document.getElementById('ctaBtn').addEventListener('click', function(){
+    goTo('login');
+  });
+})();
+
+// ---- Card apply view: pushed from 立即體驗, shows whichever tier was selected on the
+//      卡片 tab as a portrait card + name + one-line description. 確認申請 shows the
+//      tier's price and, like 確認轉帳, stays disabled until the user is logged in. ----
+(function(){
+  var applyVcard = document.getElementById('applyVcard');
+  var applyName = document.getElementById('applyName');
+  var applyDesc = document.getElementById('applyDesc');
+  var applyConfirmBtn = document.getElementById('applyConfirmBtn');
+
+  window.renderCardApply = function(){
+    var t = window.TIERS[window.currentTier];
+    applyVcard.className = 'apply-vcard tier-' + window.currentTier;
+    applyName.textContent = t.name;
+    applyDesc.textContent = t.feats.join('，');
+    applyConfirmBtn.textContent = '確認申請 · ' + t.price + ' USDT';
+  };
+})();
+
+// ---- Shared view switching: 首頁/卡片 swap which view is visible, same document/URL,
+//      shared bottom nav's active state follows whichever view is showing. 轉帳 and
+//      card-apply are pushed flows (reached from actions, not nav tabs) so they hide
+//      the shared bottom nav entirely while showing, like the reference screens. ----
+(function(){
+  var viewHome = document.getElementById('view-home');
+  var viewCard = document.getElementById('view-card');
+  var viewTransfer = document.getElementById('view-transfer');
+  var viewCardApply = document.getElementById('view-card-apply');
+  var viewLogin = document.getElementById('view-login');
+  var viewRegister = document.getElementById('view-register');
+  var viewGuestMe = document.getElementById('view-guest-me');
+  var viewMarket = document.getElementById('view-market');
+  var viewPostAd = document.getElementById('view-post-ad');
+  var viewBuyOrder = document.getElementById('view-buy-order');
+  var viewAbout = document.getElementById('view-about');
+  var viewAnnounceList = document.getElementById('view-announce-list');
+  var viewAnnounceDetail = document.getElementById('view-announce-detail');
+  var viewCustomerService = document.getElementById('view-customer-service');
+  var navHome = document.getElementById('navHome');
+  var navCard = document.getElementById('navCard');
+  var navMe = document.getElementById('navMe');
+  var navbarWrap = document.getElementById('navbarWrap');
+  var subnavWrap = document.getElementById('subnavWrap');
+  var subC2C = document.getElementById('subC2C');
+
+  window.goTo = function(view){
+    viewHome.hidden = true;
+    viewCard.hidden = true;
+    viewTransfer.hidden = true;
+    viewCardApply.hidden = true;
+    viewLogin.hidden = true;
+    viewRegister.hidden = true;
+    viewGuestMe.hidden = true;
+    viewMarket.hidden = true;
+    viewPostAd.hidden = true;
+    viewBuyOrder.hidden = true;
+    viewAnnounceList.hidden = true;
+    viewAnnounceDetail.hidden = true;
+    viewCustomerService.hidden = true;
+    viewAbout.hidden = true;
+    navHome.classList.remove('active');
+    navCard.classList.remove('active');
+    navMe.classList.remove('active');
+    navbarWrap.hidden = false;
+    subnavWrap.hidden = true;
+    subC2C.classList.remove('active');
+
+    if(view === 'card'){
+      viewCard.hidden = false;
+      navCard.classList.add('active');
+    } else if(view === 'transfer'){
+      viewTransfer.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'card-apply'){
+      if(window.renderCardApply) window.renderCardApply();
+      viewCardApply.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'login'){
+      viewLogin.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'register'){
+      viewRegister.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'guest-me'){
+      viewGuestMe.hidden = false;
+      navMe.classList.add('active');
+    } else if(view === 'market'){
+      viewMarket.hidden = false;
+      navbarWrap.hidden = true;
+      subnavWrap.hidden = false;
+      subC2C.classList.add('active');
+    } else if(view === 'post-ad'){
+      viewPostAd.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'buy-order'){
+      viewBuyOrder.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'about'){
+      viewAbout.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'announce-list'){
+      viewAnnounceList.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'announce-detail'){
+      viewAnnounceDetail.hidden = false;
+      navbarWrap.hidden = true;
+    } else if(view === 'customer-service'){
+      viewCustomerService.hidden = false;
+      navbarWrap.hidden = true;
+    } else {
+      viewHome.hidden = false;
+      navHome.classList.add('active');
+    }
+  };
+})();
+
+// ---- C2C market view: 購買/出售 pill tabs swap between the ad-card list and the
+//      (empty, no sell orders yet) sell panel, matching the reference's two panels ----
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('#mktBuySellTabs button'));
+  var buyPanel = document.getElementById('mktBuyPanel');
+  var sellPanel = document.getElementById('mktSellPanel');
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabs.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var isBuy = btn.dataset.panel === 'buy';
+      buyPanel.hidden = !isBuy;
+      sellPanel.hidden = isBuy;
+    });
+  });
+})();
+
+// ---- Generic pill/chip tab groups elsewhere (order-records status/side filters, post-ad
+//      買入/賣出) are cosmetic in this mockup — just toggle which button looks active ----
+(function(){
+  var groups = document.querySelectorAll('.pill-tabs:not(#mktBuySellTabs), .chip-tabs');
+  groups.forEach(function(group){
+    var btns = Array.prototype.slice.call(group.querySelectorAll('button')).filter(function(b){
+      return b.style.pointerEvents !== 'none';
+    });
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        btns.forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+      });
+    });
+  });
+})();
+
+// ---- Post-ad view: 市場參考價 fills the price field; 交易數量/單價 combine into the
+//      live ≈ HKD estimate underneath, same pattern as elsewhere in this mockup ----
+(function(){
+  var MARKET_PRICE = 7.84;
+  var priceBtn = document.getElementById('paMarketPriceBtn');
+  var priceInput = document.getElementById('paPrice');
+  var qtyInput = document.getElementById('paQty');
+  var equivEl = document.getElementById('paEquiv');
+
+  function updateEquiv(){
+    var price = parseFloat(priceInput.value) || 0;
+    var qty = parseFloat(qtyInput.value) || 0;
+    equivEl.textContent = '≈ ' + (price * qty).toFixed(2) + ' HKD';
+  }
+  priceBtn.addEventListener('click', function(){
+    priceInput.value = MARKET_PRICE.toFixed(2);
+    updateEquiv();
+  });
+  priceInput.addEventListener('input', updateEquiv);
+  qtyInput.addEventListener('input', updateEquiv);
+})();
+
+// ---- Buy-order view: 最大 fills the HKD amount, 收到金額 recalculates live off the
+//      listing's fixed price — same "fill + live total" pattern as 轉帳's 全部 button ----
+(function(){
+  var PRICE = 7.80;
+  var amountInput = document.getElementById('boAmount');
+  var maxBtn = document.getElementById('boMaxBtn');
+  var receiveEl = document.getElementById('boReceive');
+
+  function updateReceive(){
+    var amt = parseFloat(amountInput.value) || 0;
+    receiveEl.textContent = (amt / PRICE).toFixed(2) + ' USDT';
+  }
+  maxBtn.addEventListener('click', function(){
+    amountInput.value = '100';
+    updateReceive();
+  });
+  amountInput.addEventListener('input', updateReceive);
+})();
+
+// ---- Transfer view: 全部 fills the amount field with the available balance;
+//      確認轉帳 stays disabled for a guest — it only unlocks once the user is logged in ----
+(function(){
+  var AVAILABLE = 0.00; // guest has no balance to transfer yet
+  var allBtn = document.getElementById('tfAllBtn');
+  var amountInput = document.getElementById('tfAmountInput');
+  var availableLabel = document.getElementById('tfAvailable');
+
+  availableLabel.textContent = AVAILABLE.toFixed(2) + ' USDT';
+
+  allBtn.addEventListener('click', function(){
+    amountInput.value = AVAILABLE.toFixed(2);
+  });
+})();
+
+// ---- Login view: eye button toggles the password field between hidden/visible ----
+(function(){
+  var pwInput = document.getElementById('loginPassword');
+  var eyeBtn = document.getElementById('loginEyeBtn');
+  eyeBtn.addEventListener('click', function(){
+    pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+  });
+})();
+
+// ---- Register view: eye button toggles the password field, swapping between the
+//      eye-off icon (currently masked, matching the reference) and the open eye ----
+(function(){
+  var EYE_OFF = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 4.22-5.06"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="m1 1 22 22"/>';
+  var EYE_OPEN = '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+  var pwInput = document.getElementById('regPassword');
+  var eyeBtn = document.getElementById('regEyeBtn1');
+  var eyeSvg = eyeBtn.querySelector('svg');
+  eyeBtn.addEventListener('click', function(){
+    var showing = pwInput.type === 'text';
+    pwInput.type = showing ? 'password' : 'text';
+    eyeSvg.innerHTML = showing ? EYE_OFF : EYE_OPEN;
+  });
+})();
+
+// ---- Register view: 獲取驗證碼 is a demo no-op — just gives a brief disabled/counting
+//      state so it reads as "sent" rather than doing nothing visibly ----
+(function(){
+  var btn = document.getElementById('regOtpBtn');
+  btn.addEventListener('click', function(){
+    if(btn.disabled) return;
+    var seconds = 60;
+    btn.disabled = true;
+    btn.style.opacity = '.6';
+    var original = btn.textContent;
+    var timer = setInterval(function(){
+      btn.textContent = seconds + ' 秒後重試';
+      seconds -= 1;
+      if(seconds < 0){
+        clearInterval(timer);
+        btn.textContent = original;
+        btn.disabled = false;
+        btn.style.opacity = '';
+      }
+    }, 1000);
+    btn.textContent = seconds + ' 秒後重試';
+  });
+})();
+</script>
+</body>
+</html>

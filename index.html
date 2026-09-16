@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Website</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #ffffff;
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+        }
+
+        /* 上方連結區塊 */
+        .link-box {
+            width: 540px;
+            height: 90px;
+            margin: 50px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-box a {
+            font-size: 20px;
+            color: #333333;
+            text-decoration: none;
+        }
+
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* 手機版 */
+        @media (max-width: 600px) {
+            .link-box {
+                width: calc(100% - 40px);
+                height: 90px;
+                margin-top: 30px;
+            }
+
+            .link-box a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="link-box">
+        <a href="h5.html">前往 Landing Page</a>
+    </div>
+
+</body>
+</html>
