@@ -1029,6 +1029,52 @@
   .svc-sub{font-size:16.5px;color:var(--text-secondary);margin-top:2px;}
   .svc-trail{flex:none;color:var(--text-tertiary);}
   .svc-note{font-size:16.5px;color:var(--text-secondary);margin-top:16px;line-height:1.6;}
+
+  /* ---- Language sheet: opened from the globe icon on 登入/註冊, a bottom sheet
+         matching the reference's 3-language picker. Row typography reuses the
+         app's established list-row scale (18/600 name, 16.5 tertiary sub) rather
+         than one-off sizes. ---- */
+  .lang-backdrop{
+    position:fixed;inset:0;background:rgba(17,19,24,0.5);
+    z-index:40;
+  }
+  .lang-backdrop[hidden]{display:none;}
+  .lang-sheet{
+    position:fixed;left:0;right:0;bottom:0;
+    max-width:480px;margin:0 auto;
+    background:#fff;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));
+    z-index:41;
+    box-shadow:0 -8px 30px rgba(17,19,24,0.18);
+  }
+  .lang-sheet[hidden]{display:none;}
+  .lang-sheet-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .lang-sheet-title{font-size:18.5px;font-weight:700;color:var(--text-primary);}
+  .lang-close{
+    width:32px;height:32px;border-radius:50%;flex:none;
+    background:var(--grey-btn);border:none;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-secondary);cursor:pointer;
+  }
+  .lang-list{display:flex;flex-direction:column;gap:10px;}
+  .lang-row{
+    display:flex;align-items:center;gap:12px;
+    border:1.5px solid var(--divider);border-radius:14px;
+    padding:12px 14px;cursor:pointer;background:#fff;
+  }
+  .lang-row.active{border-color:var(--accent-blue);background:var(--accent-blue-soft);}
+  .lang-flag{
+    width:34px;height:34px;border-radius:50%;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;background:var(--grey-btn);
+    line-height:1;
+  }
+  .lang-names{flex:1;min-width:0;}
+  .lang-name{font-size:18px;font-weight:600;color:var(--text-primary);}
+  .lang-row.active .lang-name{color:var(--accent-blue);}
+  .lang-sub{font-size:16.5px;color:var(--text-tertiary);margin-top:1px;}
+  .lang-check{flex:none;width:20px;height:20px;color:var(--accent-blue);visibility:hidden;}
+  .lang-row.active .lang-check{visibility:visible;}
 </style>
 </head>
 <body>
@@ -1266,7 +1312,7 @@
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         <div class="tf-title">登入</div>
-        <button class="tf-back" aria-label="切換語言">
+        <button class="tf-back" aria-label="切換語言" onclick="openLangSheet()">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
         </button>
       </div>
@@ -1316,7 +1362,7 @@
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         <div class="tf-title">註冊</div>
-        <button class="tf-back" aria-label="切換語言">
+        <button class="tf-back" aria-label="切換語言" onclick="openLangSheet()">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
         </button>
       </div>
@@ -1735,6 +1781,42 @@
   </div>
 </div>
 
+<div class="lang-backdrop" id="langBackdrop" hidden onclick="closeLangSheet()"></div>
+<div class="lang-sheet" id="langSheet" hidden role="dialog" aria-label="選擇語言">
+  <div class="lang-sheet-hd">
+    <div class="lang-sheet-title" id="langSheetTitle">繁體中文</div>
+    <button class="lang-close" onclick="closeLangSheet()" aria-label="關閉">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="lang-list">
+    <div class="lang-row" data-lang="en" onclick="selectLang('en')">
+      <span class="lang-flag">🇺🇸</span>
+      <div class="lang-names">
+        <div class="lang-name">English</div>
+        <div class="lang-sub">English</div>
+      </div>
+      <span class="lang-check"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    </div>
+    <div class="lang-row active" data-lang="zh-Hant" onclick="selectLang('zh-Hant')">
+      <span class="lang-flag">🇹🇼</span>
+      <div class="lang-names">
+        <div class="lang-name">繁體中文</div>
+        <div class="lang-sub">Traditional Chinese</div>
+      </div>
+      <span class="lang-check"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    </div>
+    <div class="lang-row" data-lang="zh-Hans" onclick="selectLang('zh-Hans')">
+      <span class="lang-flag">🇨🇳</span>
+      <div class="lang-names">
+        <div class="lang-name">簡體中文</div>
+        <div class="lang-sub">Simplified Chinese</div>
+      </div>
+      <span class="lang-check"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    </div>
+  </div>
+</div>
+
 <script>
 // ---- Banner carousel (home view): swipe/scroll-driven, dots stay in sync ----
 (function(){
@@ -2058,6 +2140,34 @@
     }, 1000);
     btn.textContent = seconds + ' 秒後重試';
   });
+})();
+
+// ---- Language sheet: opened from the globe icon on 登入/註冊. Purely visual —
+//      picks a language, shows it selected, closes the sheet — no real i18n. ----
+(function(){
+  var backdrop = document.getElementById('langBackdrop');
+  var sheet = document.getElementById('langSheet');
+  var title = document.getElementById('langSheetTitle');
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.lang-row'));
+
+  window.openLangSheet = function(){
+    backdrop.hidden = false;
+    sheet.hidden = false;
+  };
+
+  window.closeLangSheet = function(){
+    backdrop.hidden = true;
+    sheet.hidden = true;
+  };
+
+  window.selectLang = function(code){
+    rows.forEach(function(row){
+      row.classList.toggle('active', row.dataset.lang === code);
+    });
+    var picked = document.querySelector('.lang-row[data-lang="' + code + '"] .lang-name');
+    if(picked) title.textContent = picked.textContent;
+    setTimeout(window.closeLangSheet, 150);
+  };
 })();
 </script>
 </body>
