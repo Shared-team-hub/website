@@ -80,13 +80,13 @@
   }
   .guest-hero h2{
     margin:0;
-    font-size:21.5px;
+    font-size:18.5px;
     font-weight:800;
     color:var(--text-primary);
   }
   .guest-hero p{
     margin:0;
-    font-size:16.5px;
+    font-size:14px;
     line-height:1.6;
     color:var(--text-secondary);
     max-width:260px;
@@ -122,7 +122,7 @@
   }
   .action-icon svg{width:26px;height:26px;}
   .action-label{
-    font-size:17px;
+    font-size:14.5px;
     line-height:1;
     font-weight:500;
     color:var(--text-primary);
@@ -189,7 +189,7 @@
     border-radius:3px;
     background:rgba(90,140,255,0.35);
   }
-  .banner-slide.cold .txt{position:relative;z-index:1;font-weight:800;font-size:19px;line-height:1.35;max-width:62%;}
+  .banner-slide.cold .txt{position:relative;z-index:1;font-weight:800;font-size:16px;line-height:1.35;max-width:62%;}
   .banner-slide.eco{
     background:linear-gradient(150deg,#eef2fb,#e2e9f8);
     color:#12141a;
@@ -198,8 +198,8 @@
     background:linear-gradient(150deg,#F97316,#EA580C);
     align-items:flex-start;
   }
-  .banner-slide.bito .banner-title{font-size:20px;margin-bottom:4px;}
-  .banner-slide.bito .banner-feat{font-size:13.5px;color:rgba(255,255,255,.88);max-width:60%;}
+  .banner-slide.bito .banner-title{font-size:17px;margin-bottom:4px;}
+  .banner-slide.bito .banner-feat{font-size:11.5px;color:rgba(255,255,255,.88);max-width:60%;}
   .bito-decor{position:absolute;border-radius:50%;background:rgba(255,255,255,0.12);}
   .bito-decor.d1{width:100px;height:100px;right:-30px;top:-34px;}
   .bito-decor.d2{width:64px;height:64px;right:14px;bottom:-30px;background:rgba(255,255,255,0.08);}
@@ -216,7 +216,7 @@
   .banner-slide.c2c .badge{
     align-self:flex-start;
     background:#DBEAFE;color:#1D4ED8;
-    font-size:12px;font-weight:700;
+    font-size:10px;font-weight:700;
     padding:3px 8px;border-radius:999px;
     margin-bottom:6px;
   }
@@ -225,17 +225,17 @@
     align-items:center;
     gap:6px;
     font-weight:700;
-    font-size:15px;
+    font-size:13px;
     margin-bottom:6px;
   }
   .banner-brand .logo{
     width:16px;height:16px;border-radius:4px;
     background:#111318;
     display:flex;align-items:center;justify-content:center;
-    color:#f5c344;font-size:12px;font-weight:800;
+    color:#f5c344;font-size:10px;font-weight:800;
   }
   .banner-title{
-    font-size:20px;
+    font-size:17px;
     font-weight:800;
     line-height:1.25;
     margin-bottom:6px;
@@ -243,7 +243,7 @@
   }
   .banner-title span{color:var(--accent-blue);}
   .banner-feat{
-    font-size:13px;
+    font-size:11px;
     color:#4b5160;
     margin-bottom:2px;
     max-width:62%;
@@ -255,7 +255,7 @@
     gap:5px;
     background:var(--accent-blue);
     color:#fff;
-    font-size:13.5px;
+    font-size:11.5px;
     font-weight:700;
     padding:6px 12px;
     border-radius:999px;
@@ -279,7 +279,7 @@
     color:#fff;
     font-style:italic;
     font-weight:800;
-    font-size:11px;
+    font-size:9.5px;
     letter-spacing:.4px;
   }
   .eco-card::before{
@@ -308,8 +308,8 @@
     align-items:center;
     margin-bottom:10px;
   }
-  .section-head h3{font-size:18.5px;margin:0;color:var(--text-primary);font-weight:700;}
-  .section-head a{font-size:16.5px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
+  .section-head h3{font-size:15.5px;margin:0;color:var(--text-primary);font-weight:700;}
+  .section-head a{font-size:14px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
   .news-list{margin-bottom:18px;}
   .news-item{
     display:flex;
@@ -324,8 +324,103 @@
     background:var(--accent-blue);
     flex:none;
   }
-  .news-item .txt{flex:1;font-size:16.5px;font-weight:500;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .news-item .date{flex:none;font-size:15px;color:var(--text-tertiary);}
+  .news-item .txt{flex:1;font-size:14px;font-weight:500;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .news-item .date{flex:none;font-size:13px;color:var(--text-tertiary);}
+
+  /* ---- Logged-in home (#view-home-user): shown instead of #view-home once
+         window.isLoggedIn is true. Reuses .hd/.actions/.action-icon/.action-label and
+         the section-head/news-item type scale from the guest home untouched, so the
+         font sizes and weights don't shift across the login boundary — only the
+         balance/notice/transaction content differs. ---- */
+  .hu-avatar{
+    width:42px;height:42px;border-radius:50%;
+    background:#17BF86;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14.5px;font-weight:700;
+    flex:none;
+  }
+  .hu-balance{
+    text-align:center;
+    padding:14px 0 22px;
+  }
+  .hu-balance-label{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+  }
+  .hu-balance-label button{
+    background:none;border:none;padding:0;
+    color:var(--text-tertiary);
+    display:flex;cursor:pointer;
+  }
+  .hu-balance-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:8px;
+  }
+  .hu-balance-amount{
+    font-size:29px;
+    font-weight:800;
+    color:var(--text-primary);
+    letter-spacing:-.5px;
+  }
+  .hu-balance-unit{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--text-secondary);
+    background:var(--grey-btn);
+    border-radius:999px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .hu-notice{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid var(--divider);
+    border-radius:999px;
+    height:44px;
+    padding:0 14px;
+    margin-bottom:22px;
+    cursor:pointer;
+  }
+  .hu-notice svg{flex:none;color:var(--text-tertiary);}
+  .hu-notice .txt{
+    flex:1;min-width:0;
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-secondary);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .tx-list{margin-bottom:18px;}
+  .tx-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 0;
+    border-bottom:1px solid var(--divider);
+  }
+  .tx-item:last-child{border-bottom:none;}
+  .tx-ic{
+    flex:none;width:42px;height:42px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tx-ic.credit{background:var(--accent-blue-soft);color:var(--accent-blue);}
+  .tx-ic.debit{background:#FEE2E2;color:#DC2626;}
+  .tx-main{flex:1;min-width:0;}
+  .tx-title{font-size:14.5px;font-weight:600;color:var(--text-primary);}
+  .tx-date{font-size:13px;color:var(--text-tertiary);margin-top:2px;}
+  .tx-amount{flex:none;font-size:14.5px;font-weight:700;}
+  .tx-amount.credit{color:#16A34A;}
+  .tx-amount.debit{color:#DC2626;}
 
   /* ---- View containers: #view-home / #view-card are toggled by JS (goTo()) so
          switching "pages" never leaves this document or changes the URL ---- */
@@ -362,7 +457,7 @@
     flex:1;
     text-align:center;
     margin-right:46px;
-    font-size:21.5px;
+    font-size:18.5px;
     font-weight:700;
     color:var(--text-primary);
   }
@@ -377,8 +472,8 @@
     justify-content:space-between;
     padding:14px 16px;
   }
-  .tf-route-label{font-size:16.5px;color:var(--text-secondary);font-weight:400;}
-  .tf-route-value{font-size:18px;color:var(--text-primary);font-weight:700;}
+  .tf-route-label{font-size:14px;color:var(--text-secondary);font-weight:400;}
+  .tf-route-value{font-size:15.5px;color:var(--text-primary);font-weight:700;}
   .tf-route-divider{border:none;border-top:1px solid var(--divider);margin:0 16px;}
   .tf-swap-wrap{
     display:flex;
@@ -404,14 +499,14 @@
     background:#fff;
     height:50px;
     font-family:inherit;
-    font-size:19px;
+    font-size:16px;
     font-weight:700;
     color:var(--accent-blue);
     cursor:pointer;
     margin-bottom:20px;
   }
   .tf-amount-label{
-    font-size:16.5px;
+    font-size:14px;
     font-weight:500;
     color:var(--text-secondary);
     margin-bottom:8px;
@@ -432,25 +527,25 @@
     outline:none;
     background:none;
     font-family:inherit;
-    font-size:26.5px;
+    font-size:22.5px;
     font-weight:700;
     color:var(--text-primary);
   }
   .tf-amount-input::placeholder{color:var(--text-tertiary);}
-  .tf-amount-unit{font-size:17px;font-weight:600;color:var(--text-secondary);flex:none;}
+  .tf-amount-unit{font-size:14.5px;font-weight:600;color:var(--text-secondary);flex:none;}
   .tf-amount-all{
     flex:none;
     border:none;
     background:var(--accent-blue);
     color:#fff;
-    font-size:16px;
+    font-size:13.5px;
     font-weight:700;
     font-family:inherit;
     padding:7px 14px;
     border-radius:999px;
     cursor:pointer;
   }
-  .tf-available{font-size:16.5px;color:var(--text-secondary);margin-bottom:20px;}
+  .tf-available{font-size:14px;color:var(--text-secondary);margin-bottom:20px;}
   .tf-available span{color:var(--text-primary);font-weight:700;}
   .cta:disabled{
     background:var(--text-tertiary);
@@ -496,23 +591,23 @@
   .apply-vcard .brand-v{
     position:absolute;top:44px;right:16px;
     writing-mode:vertical-rl;
-    color:#fff;font-weight:800;font-size:17px;letter-spacing:2px;
+    color:#fff;font-weight:800;font-size:14.5px;letter-spacing:2px;
   }
   .apply-vcard .visa-v{
     position:absolute;bottom:16px;left:16px;
     writing-mode:vertical-rl;transform:rotate(180deg);
-    color:#fff;font-weight:900;font-style:italic;font-size:19px;letter-spacing:1px;
+    color:#fff;font-weight:900;font-style:italic;font-size:16px;letter-spacing:1px;
   }
   .apply-name{
     text-align:center;
-    font-size:21.5px;
+    font-size:18.5px;
     font-weight:800;
     color:var(--text-primary);
     margin-bottom:8px;
   }
   .apply-desc{
     text-align:center;
-    font-size:16.5px;
+    font-size:14px;
     color:var(--text-secondary);
     line-height:1.6;
     padding:0 16px;
@@ -535,19 +630,19 @@
   }
   .login-hd .tf-title{flex:1;margin-right:0;}
   .login-hero{margin-bottom:24px;}
-  .login-hero h2{margin:0 0 6px;font-size:21.5px;font-weight:800;color:var(--text-primary);}
-  .login-hero p{margin:0;font-size:16.5px;color:var(--text-secondary);line-height:1.6;}
+  .login-hero h2{margin:0 0 6px;font-size:18.5px;font-weight:800;color:var(--text-primary);}
+  .login-hero p{margin:0;font-size:14px;color:var(--text-secondary);line-height:1.6;}
 
   .otp-btn{
     flex:none;border:none;border-radius:8px;
     background:var(--accent-blue);color:#fff;
-    font-family:inherit;font-size:18px;font-weight:700;
+    font-family:inherit;font-size:15.5px;font-weight:700;
     padding:6px 12px;cursor:pointer;
   }
   .login-field{margin-bottom:16px;}
   .login-field label{
     display:block;
-    font-size:16.5px;
+    font-size:14px;
     font-weight:500;
     color:var(--text-secondary);
     margin-bottom:8px;
@@ -568,7 +663,7 @@
     outline:none;
     background:none;
     font-family:inherit;
-    font-size:18.5px;
+    font-size:15.5px;
     color:var(--text-primary);
   }
   .login-input-row input::placeholder{color:var(--text-tertiary);}
@@ -591,16 +686,16 @@
     display:flex;
     align-items:center;
     gap:8px;
-    font-size:16.5px;
+    font-size:14px;
     color:var(--text-primary);
     cursor:pointer;
   }
   .login-remember input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent-blue);}
-  .login-forgot{font-size:16.5px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
+  .login-forgot{font-size:14px;color:var(--accent-blue);font-weight:600;text-decoration:none;}
   .login-signup{
     text-align:center;
     margin-top:16px;
-    font-size:16.5px;
+    font-size:14px;
     color:var(--text-secondary);
   }
   .login-signup a{color:var(--accent-blue);font-weight:700;text-decoration:none;}
@@ -616,7 +711,7 @@
   }
   .hd-title{
     text-align:center;
-    font-size:21.5px;
+    font-size:18.5px;
     font-weight:700;
     color:var(--text-primary);
   }
@@ -642,11 +737,11 @@
   .vcard.tier-elite{background:linear-gradient(135deg,#141414,#1c1c1c 45%,#3a2f0f);}
   .vcard .card-brand{
     position:absolute;top:18px;left:20px;
-    color:#fff;font-weight:800;font-size:18px;letter-spacing:2px;
+    color:#fff;font-weight:800;font-size:15.5px;letter-spacing:2px;
   }
   .vcard .card-visa{
     position:absolute;bottom:16px;right:20px;
-    color:#fff;font-weight:900;font-style:italic;font-size:22.5px;letter-spacing:1px;
+    color:#fff;font-weight:900;font-style:italic;font-size:19px;letter-spacing:1px;
   }
 
   /* ---- Tier picker: tapping one swaps the preview image + details below ---- */
@@ -675,7 +770,7 @@
   .tier-opt.regular .swatch{background:linear-gradient(135deg,#1B1F3B,#0B1E4D 45%,#0052FF);}
   .tier-opt.premium .swatch{background:linear-gradient(135deg,#241835,#3B0B4D 45%,#8B2FD1);}
   .tier-opt.elite .swatch{background:linear-gradient(135deg,#141414,#1c1c1c 45%,#3a2f0f);}
-  .tier-opt .label{font-size:17px;font-weight:500;}
+  .tier-opt .label{font-size:14.5px;font-weight:500;}
   .tier-opt.active .swatch{border-color:var(--accent-blue);transform:translateY(-3px);}
   .tier-opt.active .label{color:var(--accent-blue);}
 
@@ -692,11 +787,11 @@
     border-radius:999px;
     background:var(--accent-blue-soft);
     color:var(--accent-blue);
-    font-size:15px;
+    font-size:13px;
     font-weight:700;
     margin-bottom:6px;
   }
-  .detail .name{font-size:21.5px;font-weight:800;color:var(--text-primary);margin-bottom:18px;}
+  .detail .name{font-size:18.5px;font-weight:800;color:var(--text-primary);margin-bottom:18px;}
   .feat-list{
     display:flex;
     flex-direction:column;
@@ -711,7 +806,7 @@
     display:flex;
     align-items:center;
     gap:6px;
-    font-size:16.5px;
+    font-size:14px;
     color:var(--text-secondary);
   }
   .feat-list .feat svg{color:var(--accent-blue);flex:none;}
@@ -727,7 +822,7 @@
     height:56px;
     background:var(--accent-blue);
     color:#fff;
-    font-size:19px;
+    font-size:16px;
     font-weight:700;
     font-family:inherit;
     cursor:pointer;
@@ -758,7 +853,7 @@
     padding:10px 4px;
     border-radius:14px;
     color:var(--nav-icon);
-    font-size:13.5px;
+    font-size:11.5px;
     font-weight:600;
     min-height:58px;
     text-decoration:none;
@@ -786,13 +881,13 @@
   .mkt-pill{
     flex:none;border:1.5px solid var(--divider);border-radius:999px;
     background:#fff;height:32px;padding:0 14px;
-    font-family:inherit;font-size:16.5px;font-weight:700;color:var(--text-primary);
+    font-family:inherit;font-size:14px;font-weight:700;color:var(--text-primary);
   }
 
   .pill-tabs{display:flex;gap:4px;background:var(--grey-btn);border-radius:999px;padding:4px;margin-bottom:14px;}
   .pill-tabs button{
     flex:1;border:none;background:none;border-radius:999px;height:36px;
-    font-family:inherit;font-size:17px;font-weight:700;color:var(--text-secondary);cursor:pointer;
+    font-family:inherit;font-size:14.5px;font-weight:700;color:var(--text-secondary);cursor:pointer;
   }
   .pill-tabs button.active{background:#fff;color:var(--accent-blue);box-shadow:0 1px 4px rgba(17,19,24,0.08);}
 
@@ -800,7 +895,7 @@
   .chip-tabs button{
     display:flex;align-items:center;gap:2px;
     border:1.5px solid var(--divider);background:#fff;border-radius:999px;
-    height:30px;padding:0 14px;font-family:inherit;font-size:16px;font-weight:600;
+    height:30px;padding:0 14px;font-family:inherit;font-size:13.5px;font-weight:600;
     color:var(--text-secondary);cursor:pointer;
   }
   .chip-tabs button.active{border-color:var(--accent-blue);background:var(--accent-blue-soft);color:var(--accent-blue);}
@@ -811,14 +906,14 @@
     border-radius:12px;padding:10px 12px;margin-bottom:14px;
   }
   .info-banner svg{flex:none;margin-top:1px;}
-  .info-banner span{font-size:15.5px;line-height:1.6;}
+  .info-banner span{font-size:13px;line-height:1.6;}
 
   .mkt-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
   .mkt-toolbar-right{display:flex;gap:8px;}
   .mkt-toolbar-btn{
     display:flex;align-items:center;gap:4px;
     border:none;border-radius:999px;height:30px;padding:0 12px;
-    font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+    font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
   }
   .mkt-toolbar-btn.solid{background:var(--accent-blue);color:#fff;}
   .mkt-toolbar-btn.outline{background:#fff;border:1.5px solid var(--divider);color:var(--text-primary);}
@@ -831,40 +926,40 @@
   .ad-avatar{
     width:42px;height:42px;border-radius:50%;flex:none;
     display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:17px;font-weight:700;
+    color:#fff;font-size:14.5px;font-weight:700;
   }
   .ad-card-name{flex:1;min-width:0;}
-  .ad-card-name .n{font-size:17.5px;font-weight:700;color:var(--text-primary);}
-  .ad-card-name .s{font-size:15px;color:var(--text-tertiary);margin-top:1px;}
+  .ad-card-name .n{font-size:15px;font-weight:700;color:var(--text-primary);}
+  .ad-card-name .s{font-size:13px;color:var(--text-tertiary);margin-top:1px;}
   .ad-card-price{text-align:right;flex:none;}
-  .ad-card-price .p{font-size:19px;font-weight:800;color:var(--accent-blue);}
-  .ad-card-price .u{font-size:13.5px;font-weight:600;color:var(--text-tertiary);margin-top:1px;}
+  .ad-card-price .p{font-size:16px;font-weight:800;color:var(--accent-blue);}
+  .ad-card-price .u{font-size:11.5px;font-weight:600;color:var(--text-tertiary);margin-top:1px;}
   .ad-card-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;}
   .ad-card-stats{display:flex;gap:16px;}
-  .ad-card-stats span{font-size:15px;color:var(--text-tertiary);line-height:1.5;}
-  .ad-card-stats b{display:block;font-size:16.5px;font-weight:700;color:var(--text-primary);}
+  .ad-card-stats span{font-size:13px;color:var(--text-tertiary);line-height:1.5;}
+  .ad-card-stats b{display:block;font-size:14px;font-weight:700;color:var(--text-primary);}
   .ad-buy-btn{
     flex:none;border:none;border-radius:999px;height:32px;padding:0 18px;
-    background:var(--accent-blue);color:#fff;font-family:inherit;font-size:16.5px;font-weight:700;cursor:pointer;
+    background:var(--accent-blue);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
   }
 
   .empty-state{
     display:flex;flex-direction:column;align-items:center;text-align:center;
     gap:12px;padding:70px 24px 40px;color:var(--text-tertiary);
   }
-  .empty-state p{margin:0;font-size:17px;color:var(--text-secondary);}
-  .empty-state .cta{width:auto;padding:0 24px;height:42px;font-size:17.5px;margin:0;}
+  .empty-state p{margin:0;font-size:14.5px;color:var(--text-secondary);}
+  .empty-state .cta{width:auto;padding:0 24px;height:42px;font-size:15px;margin:0;}
 
   .select-row{display:flex;gap:10px;margin-bottom:14px;}
   .select-row>div{flex:1;min-width:0;}
   .select-box{
     display:flex;align-items:center;justify-content:space-between;
     border:1px solid var(--divider);border-radius:14px;height:50px;padding:0 14px;
-    font-size:18px;font-weight:700;color:var(--text-primary);
+    font-size:15.5px;font-weight:700;color:var(--text-primary);
   }
   .select-box svg{color:var(--text-tertiary);}
 
-  .field-label{font-size:16.5px;font-weight:500;color:var(--text-secondary);margin-bottom:8px;}
+  .field-label{font-size:14px;font-weight:500;color:var(--text-secondary);margin-bottom:8px;}
   .field-row{
     display:flex;align-items:center;gap:8px;
     border:1px solid var(--divider);border-radius:16px;
@@ -872,59 +967,59 @@
   }
   .field-row input{
     flex:1;min-width:0;border:none;outline:none;background:none;
-    font-family:inherit;font-size:20px;font-weight:700;color:var(--text-primary);
+    font-family:inherit;font-size:17px;font-weight:700;color:var(--text-primary);
   }
   .field-row input::placeholder{color:var(--text-tertiary);font-weight:500;}
-  .field-row .unit{font-size:17px;font-weight:600;color:var(--text-secondary);flex:none;}
-  .field-hint{font-size:16px;color:var(--text-tertiary);margin:-2px 0 14px;}
+  .field-row .unit{font-size:14.5px;font-weight:600;color:var(--text-secondary);flex:none;}
+  .field-hint{font-size:13.5px;color:var(--text-tertiary);margin:-2px 0 14px;}
   .range-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
   .range-row .field-row{flex:1;margin-bottom:0;}
-  .range-row .tilde{color:var(--text-tertiary);font-size:17px;}
+  .range-row .tilde{color:var(--text-tertiary);font-size:14.5px;}
   .ta-input{
     width:100%;border:1px solid var(--divider);border-radius:16px;
-    padding:12px 14px;font-family:inherit;font-size:18.5px;color:var(--text-primary);
+    padding:12px 14px;font-family:inherit;font-size:15.5px;color:var(--text-primary);
     resize:none;height:80px;margin-bottom:6px;outline:none;
   }
   .ta-input::placeholder{color:var(--text-tertiary);}
   .warn-box{
     background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;
-    font-size:15.5px;line-height:1.7;padding:10px 12px;border-radius:12px;margin-bottom:16px;
+    font-size:13px;line-height:1.7;padding:10px 12px;border-radius:12px;margin-bottom:16px;
   }
 
-  .bo-price{text-align:center;font-size:17px;color:var(--text-secondary);margin-bottom:12px;}
-  .bo-price b{color:var(--text-primary);font-size:18px;}
+  .bo-price{text-align:center;font-size:14.5px;color:var(--text-secondary);margin-bottom:12px;}
+  .bo-price b{color:var(--text-primary);font-size:15.5px;}
   .bo-panel{background:#F9FAFB;border:1px solid var(--divider);border-radius:16px;padding:14px;margin-bottom:14px;}
   .bo-amount-row{display:flex;align-items:baseline;gap:8px;margin:4px 0 6px;}
   .bo-amount-input{
     flex:1;min-width:0;border:none;outline:none;background:none;
-    font-family:inherit;font-size:31px;font-weight:800;color:var(--text-primary);
+    font-family:inherit;font-size:26.5px;font-weight:800;color:var(--text-primary);
   }
   .bo-amount-input::placeholder{color:var(--text-tertiary);}
-  .bo-unit{font-size:17px;font-weight:600;color:var(--text-primary);flex:none;}
+  .bo-unit{font-size:14.5px;font-weight:600;color:var(--text-primary);flex:none;}
   .bo-max{
     flex:none;border:1.5px solid var(--accent-blue);background:none;color:var(--accent-blue);
-    border-radius:999px;height:26px;padding:0 12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
+    border-radius:999px;height:26px;padding:0 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;
   }
   .bo-sep{border:none;border-top:1px solid var(--divider);margin:10px 0;}
-  .bo-note{font-size:15.5px;color:var(--text-tertiary);margin:4px 0;}
-  .bo-line{font-size:16.5px;color:var(--text-primary);margin:4px 0;}
+  .bo-note{font-size:13px;color:var(--text-tertiary);margin:4px 0;}
+  .bo-line{font-size:14px;color:var(--text-primary);margin:4px 0;}
   .bo-line b{font-weight:700;}
   .bo-card{
     display:flex;justify-content:space-between;align-items:center;
     background:var(--grey-btn);border-radius:14px;padding:12px 16px;margin-bottom:10px;
   }
-  .bo-card .l{font-size:15.5px;color:var(--text-secondary);}
-  .bo-card .v{font-size:18px;font-weight:700;color:var(--text-primary);margin-top:2px;}
+  .bo-card .l{font-size:13px;color:var(--text-secondary);}
+  .bo-card .v{font-size:15.5px;font-weight:700;color:var(--text-primary);margin-top:2px;}
   .bo-link-btn{
     flex:none;border:1.5px solid var(--divider);background:#fff;color:var(--text-primary);
-    border-radius:999px;height:30px;padding:0 14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+    border-radius:999px;height:30px;padding:0 14px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
   }
   .merchant-row{
     display:flex;align-items:center;gap:10px;
     background:var(--grey-btn);border-radius:14px;padding:12px 16px;margin-bottom:16px;
   }
-  .merchant-row .ad-avatar{width:36px;height:36px;font-size:18px;}
-  .merchant-row .n{flex:1;font-size:17px;font-weight:700;color:var(--text-primary);}
+  .merchant-row .ad-avatar{width:36px;height:36px;font-size:15.5px;}
+  .merchant-row .n{flex:1;font-size:14.5px;font-weight:700;color:var(--text-primary);}
   .merchant-row svg{color:var(--text-tertiary);}
 
   /* ---- Sub bottom nav: shown instead of the main nav while inside the C2C market
@@ -951,7 +1046,7 @@
     padding:36px 0 40px;
   }
   .gm-logo{width:60px;height:65px;margin-bottom:16px;display:block;}
-  .gm-title{margin:0;font-size:21.5px;font-weight:800;color:var(--text-primary);}
+  .gm-title{margin:0;font-size:18.5px;font-weight:800;color:var(--text-primary);}
   .gm-row{
     display:flex;align-items:center;gap:12px;
     cursor:pointer;
@@ -965,15 +1060,15 @@
     background:var(--accent-blue-soft);color:var(--accent-blue);
     display:flex;align-items:center;justify-content:center;
   }
-  .gm-row-title{flex:1;font-size:18px;font-weight:600;color:var(--text-primary);}
+  .gm-row-title{flex:1;font-size:15.5px;font-weight:600;color:var(--text-primary);}
   .gm-row-trail{flex:none;display:flex;align-items:center;gap:6px;color:var(--text-tertiary);}
-  .gm-version{font-size:16.5px;color:var(--text-tertiary);}
+  .gm-version{font-size:14px;color:var(--text-tertiary);}
 
   #view-about{display:flex;flex-direction:column;flex:1;}
   #view-about[hidden]{display:none;}
   .about-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:8px 0 22px;}
   .about-logo-wrap img{width:56px;height:64px;}
-  .about-logo-wrap .about-version{font-size:16.5px;color:var(--text-tertiary);}
+  .about-logo-wrap .about-version{font-size:14px;color:var(--text-tertiary);}
   .about-card{
     background:var(--card-bg);border:1px solid var(--divider);border-radius:16px;
     padding:4px 16px;margin-bottom:12px;
@@ -983,11 +1078,11 @@
     padding:14px 0;cursor:pointer;
   }
   .about-row:not(:last-child){border-bottom:1px solid var(--divider);}
-  .about-row-title{font-size:18px;font-weight:600;color:var(--text-primary);}
+  .about-row-title{font-size:15.5px;font-weight:600;color:var(--text-primary);}
   .about-row-trail{flex:none;display:flex;align-items:center;gap:6px;color:var(--text-tertiary);}
-  .about-row-val{font-size:16.5px;font-weight:600;color:var(--text-primary);}
+  .about-row-val{font-size:14px;font-weight:600;color:var(--text-primary);}
   .about-row-val.link{color:var(--accent-blue);}
-  .about-footer{margin-top:20px;text-align:center;font-size:16.5px;color:var(--text-tertiary);}
+  .about-footer{margin-top:20px;text-align:center;font-size:14px;color:var(--text-tertiary);}
 
   #view-announce-list, #view-announce-detail, #view-customer-service{display:flex;flex-direction:column;flex:1;}
   #view-announce-list[hidden], #view-announce-detail[hidden], #view-customer-service[hidden]{display:none;}
@@ -1000,16 +1095,16 @@
     display:flex;align-items:center;justify-content:center;
   }
   .ann-main{flex:1;min-width:0;}
-  .ann-title{font-size:18px;font-weight:600;color:var(--text-primary);}
-  .ann-date{font-size:16.5px;color:var(--text-tertiary);margin-top:2px;}
+  .ann-title{font-size:15.5px;font-weight:600;color:var(--text-primary);}
+  .ann-date{font-size:14px;color:var(--text-tertiary);margin-top:2px;}
   .ann-trail{flex:none;color:var(--text-tertiary);}
 
-  .ann-detail-title{font-size:21.5px;font-weight:800;color:var(--text-primary);margin:4px 0 14px;}
-  .ann-detail-body{font-size:17px;line-height:1.9;color:#374151;}
+  .ann-detail-title{font-size:18.5px;font-weight:800;color:var(--text-primary);margin:4px 0 14px;}
+  .ann-detail-body{font-size:14.5px;line-height:1.9;color:#374151;}
   .ann-detail-body ul{margin:10px 0 14px;padding-left:18px;line-height:2;}
 
-  .svc-intro-title{font-size:21.5px;font-weight:800;color:var(--text-primary);margin:4px 0 4px;}
-  .svc-intro-sub{font-size:16.5px;color:var(--text-secondary);margin:0 0 18px;}
+  .svc-intro-title{font-size:18.5px;font-weight:800;color:var(--text-primary);margin:4px 0 4px;}
+  .svc-intro-sub{font-size:14px;color:var(--text-secondary);margin:0 0 18px;}
   .svc-row{
     display:flex;align-items:center;gap:12px;
     background:var(--card-bg);border:1px solid var(--divider);border-radius:16px;
@@ -1024,11 +1119,11 @@
   .svc-ic.telegram{background:#229ED9;}
   .svc-ic.online{background:var(--accent-blue);}
   .svc-main{flex:1;min-width:0;}
-  .svc-title{font-size:18px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:6px;}
-  .svc-badge{font-size:13.5px;font-weight:700;color:var(--accent-blue);background:#fff;border:1px solid var(--accent-blue);border-radius:6px;padding:1px 6px;}
-  .svc-sub{font-size:16.5px;color:var(--text-secondary);margin-top:2px;}
+  .svc-title{font-size:15.5px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:6px;}
+  .svc-badge{font-size:11.5px;font-weight:700;color:var(--accent-blue);background:#fff;border:1px solid var(--accent-blue);border-radius:6px;padding:1px 6px;}
+  .svc-sub{font-size:14px;color:var(--text-secondary);margin-top:2px;}
   .svc-trail{flex:none;color:var(--text-tertiary);}
-  .svc-note{font-size:16.5px;color:var(--text-secondary);margin-top:16px;line-height:1.6;}
+  .svc-note{font-size:14px;color:var(--text-secondary);margin-top:16px;line-height:1.6;}
 
   /* ---- Language sheet: opened from the globe icon on 登入/註冊, a bottom sheet
          matching the reference's 3-language picker. Row typography reuses the
@@ -1049,7 +1144,7 @@
   }
   .lang-sheet[hidden]{display:none;}
   .lang-sheet-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-  .lang-sheet-title{font-size:18.5px;font-weight:700;color:var(--text-primary);}
+  .lang-sheet-title{font-size:15.5px;font-weight:700;color:var(--text-primary);}
   .lang-close{
     width:32px;height:32px;border-radius:50%;flex:none;
     background:var(--grey-btn);border:none;
@@ -1066,13 +1161,13 @@
   .lang-flag{
     width:34px;height:34px;border-radius:50%;flex:none;
     display:flex;align-items:center;justify-content:center;
-    font-size:18px;background:var(--grey-btn);
+    font-size:15.5px;background:var(--grey-btn);
     line-height:1;
   }
   .lang-names{flex:1;min-width:0;}
-  .lang-name{font-size:18px;font-weight:600;color:var(--text-primary);}
+  .lang-name{font-size:15.5px;font-weight:600;color:var(--text-primary);}
   .lang-row.active .lang-name{color:var(--accent-blue);}
-  .lang-sub{font-size:16.5px;color:var(--text-tertiary);margin-top:1px;}
+  .lang-sub{font-size:14px;color:var(--text-tertiary);margin-top:1px;}
   .lang-check{flex:none;width:20px;height:20px;color:var(--accent-blue);visibility:hidden;}
   .lang-row.active .lang-check{visibility:visible;}
 </style>
@@ -1134,7 +1229,7 @@
           <div class="banner-slide cold" data-slide="0">
             <div class="hexbg"></div>
             <div class="cold-device"></div>
-            <div class="txt">冷錢包<br><span style="font-weight:600;font-size:16px;opacity:.85;">邁向加密世界</span></div>
+            <div class="txt">冷錢包<br><span style="font-weight:600;font-size:13.5px;opacity:.85;">邁向加密世界</span></div>
           </div>
           <div class="banner-slide eco" data-slide="1">
             <div class="banner-brand"><span class="logo">E</span>Ecrypto 加密易</div>
@@ -1186,6 +1281,106 @@
           <div class="dot-ic"></div>
           <div class="txt">【教學】3 分鐘完成身份驗證</div>
           <div class="date">09/05</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="view-home-user" hidden>
+
+      <div class="hd">
+        <div class="hu-avatar">E</div>
+        <div class="grow"></div>
+        <div class="hd-iconbtn" onclick="goTo('customer-service')" role="button" aria-label="聯繫客服">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <div class="hd-iconbtn" onclick="goTo('announce-list')" role="button" aria-label="公告中心">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+      </div>
+
+      <div class="hu-balance">
+        <div class="hu-balance-label">
+          預估總資產
+          <button type="button" id="huEyeBtn" aria-label="顯示/隱藏資產">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="hu-balance-row">
+          <span class="hu-balance-amount" id="huBalanceAmount">135.00</span>
+          <span class="hu-balance-unit">USDT
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="action-btn">
+          <div class="action-icon primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          </div>
+          <div class="action-label">儲值</div>
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m7 13 5-5 5 5"/><path d="M5 3h14"/></svg>
+          </div>
+          <div class="action-label">提領</div>
+        </div>
+        <div class="action-btn" onclick="goTo('transfer')" style="cursor:pointer;">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 3 4 4-4 4"/><path d="M21 7H3"/><path d="m7 21-4-4 4-4"/><path d="M3 17h18"/></svg>
+          </div>
+          <div class="action-label">轉帳</div>
+        </div>
+        <div class="action-btn" onclick="goTo('card')" style="cursor:pointer;">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div class="action-label">卡片</div>
+        </div>
+      </div>
+
+      <div class="hu-notice" onclick="goTo('announce-list')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="txt" id="huNoticeText">weqweqwe</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="section-head">
+        <h3>交易紀錄</h3>
+        <a href="#">查看全部</a>
+      </div>
+      <div class="tx-list">
+        <div class="tx-item">
+          <div class="tx-ic debit">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div class="tx-main">
+            <div class="tx-title">開卡扣款</div>
+            <div class="tx-date">2026-09-11 12:15:48</div>
+          </div>
+          <div class="tx-amount debit">-15 USDT</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-ic credit">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          </div>
+          <div class="tx-main">
+            <div class="tx-title">鏈上儲值</div>
+            <div class="tx-date">2026-09-11 04:06:54</div>
+          </div>
+          <div class="tx-amount credit">+50 USDT</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-ic credit">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          </div>
+          <div class="tx-main">
+            <div class="tx-title">鏈上儲值</div>
+            <div class="tx-date">2026-09-09 03:33:02</div>
+          </div>
+          <div class="tx-amount credit">+100 USDT</div>
         </div>
       </div>
 
@@ -1561,7 +1756,7 @@
         <button class="tf-back" onclick="goTo('home')" aria-label="返回">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <div style="font-size:21.5px;font-weight:700;color:var(--text-primary);">市場掛單</div>
+        <div style="font-size:18.5px;font-weight:700;color:var(--text-primary);">市場掛單</div>
         <div class="grow"></div>
         <button class="mkt-pill">USDT</button>
       </div>
@@ -1656,7 +1851,7 @@
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin:0 0 8px;">
         <span class="field-label" style="margin:0;">設置價格</span>
-        <button id="paMarketPriceBtn" style="border:none;background:none;color:var(--accent-blue);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;padding:0;">市場參考價：7.84 HKD</button>
+        <button id="paMarketPriceBtn" style="border:none;background:none;color:var(--accent-blue);font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;padding:0;">市場參考價：7.84 HKD</button>
       </div>
       <div class="field-row">
         <input id="paPrice" placeholder="請輸入單價" inputmode="decimal">
@@ -1818,6 +2013,11 @@
 </div>
 
 <script>
+// ---- This mockup has no backend: whether 首頁 renders the guest view or the
+//      logged-in view lives entirely in this flag, flipped once by the login/register
+//      submit buttons below. ----
+window.isLoggedIn = false;
+
 // ---- Banner carousel (home view): swipe/scroll-driven, dots stay in sync ----
 (function(){
   var viewport = document.getElementById('bannerViewport');
@@ -1913,6 +2113,7 @@
 //      the shared bottom nav entirely while showing, like the reference screens. ----
 (function(){
   var viewHome = document.getElementById('view-home');
+  var viewHomeUser = document.getElementById('view-home-user');
   var viewCard = document.getElementById('view-card');
   var viewTransfer = document.getElementById('view-transfer');
   var viewCardApply = document.getElementById('view-card-apply');
@@ -1935,6 +2136,7 @@
 
   window.goTo = function(view){
     viewHome.hidden = true;
+    viewHomeUser.hidden = true;
     viewCard.hidden = true;
     viewTransfer.hidden = true;
     viewCardApply.hidden = true;
@@ -1998,7 +2200,11 @@
       viewCustomerService.hidden = false;
       navbarWrap.hidden = true;
     } else {
-      viewHome.hidden = false;
+      if(window.isLoggedIn){
+        viewHomeUser.hidden = false;
+      } else {
+        viewHome.hidden = false;
+      }
       navHome.classList.add('active');
     }
   };
@@ -2168,6 +2374,35 @@
     if(picked) title.textContent = picked.textContent;
     setTimeout(window.closeLangSheet, 150);
   };
+})();
+
+// ---- Login/Register submit: no backend to call, so submitting either form just
+//      flips isLoggedIn and returns to 首頁, which now renders view-home-user instead
+//      of the guest view-home. ----
+(function(){
+  function logIn(){
+    window.isLoggedIn = true;
+    goTo('home');
+  }
+  document.getElementById('loginSubmitBtn').addEventListener('click', logIn);
+  document.getElementById('regSubmitBtn').addEventListener('click', logIn);
+})();
+
+// ---- Logged-in home: eye button masks/unmasks the balance, reusing the same
+//      open/closed icon swap as the login password fields ----
+(function(){
+  var EYE_OFF = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 4.22-5.06"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="m1 1 22 22"/>';
+  var EYE_OPEN = '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+  var btn = document.getElementById('huEyeBtn');
+  var svg = btn.querySelector('svg');
+  var amount = document.getElementById('huBalanceAmount');
+  var real = amount.textContent;
+  var masked = false;
+  btn.addEventListener('click', function(){
+    masked = !masked;
+    amount.textContent = masked ? '••••••' : real;
+    svg.innerHTML = masked ? EYE_OFF : EYE_OPEN;
+  });
 })();
 </script>
 </body>
